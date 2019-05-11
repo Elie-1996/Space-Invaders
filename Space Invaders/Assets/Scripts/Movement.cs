@@ -20,6 +20,7 @@ public class Movement : MonoBehaviour
         if (rigidbody == null)
         {
             Debug.LogError("Movement.cs: No Rigidbody component was found!");
+            return;
         }
 
         HandleMovement(rigidbody);
