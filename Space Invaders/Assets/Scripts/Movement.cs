@@ -19,7 +19,7 @@ public class Movement : MonoBehaviour
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         if (rigidbody == null)
         {
-            Debug.LogError("Movement.cs: No Rigidbody component was found!");
+            Debug.LogError(gameObject.name + " (Movement.cs): No Rigidbody component was found!");
             return;
         }
 

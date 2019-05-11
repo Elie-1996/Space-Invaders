@@ -11,7 +11,7 @@ public class RenderMeshInsideOut : MonoBehaviour
         MeshFilter meshComponent = GetComponent<MeshFilter>();
         if (meshComponent == null)
         {
-            Debug.LogError(gameObject.name + ": looked for non-existent mesh model in RenderMeshInsideOut.cs");
+            Debug.LogError(gameObject.name + "(RenderMeshInsideOut.cs): looked for non-existent mesh model in RenderMeshInsideOut.cs");
             return;
         }
         Mesh meshModel = meshComponent.mesh;
