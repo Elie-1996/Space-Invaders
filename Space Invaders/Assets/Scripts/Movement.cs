@@ -6,11 +6,32 @@ public class Movement : MonoBehaviour
 {
     public float moveSpeed;
     public float rotationSpeed;
+    public GameObject cameras;
+    public float cameraSwitchRate;
+
+    private float camSwitchTime;
 
     private void Start()
     {
+        camSwitchTime = Time.time;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        SetActiveCameras();
+    }
+
+    private void Update()
+    {
+        SwitchActiveCamera();
+    }
+
+    private void SwitchActiveCamera()
+    {
+        if (Input.GetKey(KeyCode.Tab) == false) return;
+        if (Time.time <= camSwitchTime) return;
+
+        camSwitchTime = Time.time + cameraSwitchRate;
+        PlayerGameObject.Tags.cameras.Next();
+        SetActiveCameras();
     }
 
     private void FixedUpdate()
@@ -18,7 +39,7 @@ public class Movement : MonoBehaviour
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         if (rigidbody == null)
         {
-            Debug.LogError(gameObject.name + " (Movement.cs): No Rigidbody component was found!");
+            Debug.LogError(gameObject.name + " (" + typeof(Movement).Name + "): No Rigidbody component was found!");
             return;
         }
 
@@ -44,5 +65,19 @@ public class Movement : MonoBehaviour
         float roundRotationInput = Input.GetAxis("Mouse X");
         
         rigidbody.transform.Rotate(upRotationInput * rotationSpeed, roundRotationInput * rotationSpeed, 0.0f);
+    }
+
+    private void SetActiveCameras()
+    {
+        if (cameras == null) { Debug.Log(typeof(Movement).Name + ": Start() Function was initiated with null"); return; }
+        foreach (Transform child in cameras.transform)
+        {
+            child.gameObject.SetActive(false);
+
+            if (child.gameObject.tag == PlayerGameObject.Tags.cameras.GetValue())
+            {
+                child.gameObject.SetActive(true);
+            }
+        }
     }
 }
