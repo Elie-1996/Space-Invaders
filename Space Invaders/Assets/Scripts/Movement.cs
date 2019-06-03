@@ -11,6 +11,12 @@ public class Movement : MonoBehaviour
 
     private float camSwitchTime;
 
+    public GameObject rocket1;
+    public Transform rocket1Shot;
+    public GameObject rocket2;
+    public Transform rocket2Shot;
+    public float fireRate;
+    private float nextFire;
     private void Start()
     {
         camSwitchTime = Time.time;
@@ -34,6 +40,19 @@ public class Movement : MonoBehaviour
         SetActiveCameras();
     }
 
+    private void Update()
+    {
+        if(Input.GetButton("Fire1") && Time.time > nextFire)
+        {
+            nextFire = Time.time + fireRate;
+            Instantiate(rocket1, rocket1Shot.position, rocket1Shot.rotation);
+        }
+        if (Input.GetButton("Fire2") && Time.time > nextFire)
+        {
+            nextFire = Time.time + fireRate;
+            Instantiate(rocket2, rocket2Shot.position, rocket2Shot.rotation);
+        }
+    }
     private void FixedUpdate()
     {
         Rigidbody rigidbody = GetComponent<Rigidbody>();
