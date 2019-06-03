@@ -25,11 +25,6 @@ public class Movement : MonoBehaviour
         SetActiveCameras();
     }
 
-    private void Update()
-    {
-        SwitchActiveCamera();
-    }
-
     private void SwitchActiveCamera()
     {
         if (Input.GetKey(KeyCode.Tab) == false) return;
@@ -42,7 +37,8 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetButton("Fire1") && Time.time > nextFire)
+        SwitchActiveCamera();
+        if (Input.GetButton("Fire1") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
             Instantiate(rocket1, rocket1Shot.position, rocket1Shot.rotation);
