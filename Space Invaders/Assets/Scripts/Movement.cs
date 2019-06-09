@@ -37,16 +37,21 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
+        AudioSource audioData;  
         SwitchActiveCamera();
         if (Input.GetButton("Fire1") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
             Instantiate(rocket1, rocket1Shot.position, rocket1Shot.rotation);
+            audioData = GetComponent<AudioSource>();
+            audioData.Play(0);
         }
         if (Input.GetButton("Fire2") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
             Instantiate(rocket2, rocket2Shot.position, rocket2Shot.rotation);
+            audioData = GetComponent<AudioSource>();
+            audioData.Play(0);
         }
     }
     private void FixedUpdate()
