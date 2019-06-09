@@ -6,7 +6,7 @@ public class DestroyEnemy : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == Utils.tagBackground)
+        if(other.tag == Utils.TagBackground)
         {
             return;
         }

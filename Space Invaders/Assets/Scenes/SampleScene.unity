@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.40303728, g: 0.42368498, b: 0.42514232, a: 1}
+  m_IndirectSpecularColor: {r: 0.40303722, g: 0.4236848, b: 0.42514268, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -527,6 +527,7 @@ GameObject:
   - component: {fileID: 1353600557}
   - component: {fileID: 1353600556}
   - component: {fileID: 1353600560}
+  - component: {fileID: 1353600561}
   m_Layer: 0
   m_Name: Circular_Background
   m_TagString: Circular_Background
@@ -545,7 +546,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.35
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1353600557
 MeshRenderer:
@@ -618,6 +619,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978a9f1ddf14abf40807b5f437be10e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1353600561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353600555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86f2e11c563032341ad39e7035aa1871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1799328730}
 --- !u!1 &1427851313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,6 +1042,7 @@ GameObject:
   - component: {fileID: 1799328733}
   - component: {fileID: 1799328732}
   - component: {fileID: 1799328734}
+  - component: {fileID: 1799328735}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1065,7 +1080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b54b0c7eed3fa44ac704fa708f60f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 100
   rotationSpeed: 10
   cameras: {fileID: 1895746753}
   cameraSwitchRate: 0.5
@@ -1102,6 +1117,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0173eb5f8bd4d88439c0a34436e9b47c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &1799328735
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799328730}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 801.78485, y: 133.12463, z: 917.1487}
+  m_Center: {x: 4.5584435, y: -35.44284, z: -41.42552}
 --- !u!1 &1895746753
 GameObject:
   m_ObjectHideFlags: 0

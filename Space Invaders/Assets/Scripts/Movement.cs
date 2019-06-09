@@ -84,7 +84,7 @@ public class Movement : MonoBehaviour
 
     private void SetActiveCameras()
     {
-        if (cameras == null) { Debug.Log(typeof(Movement).Name + ": Start() Function was initiated with null"); return; }
+        if (cameras == null) { Debug.LogError(typeof(Movement).Name + ": Start() Function was initiated with null"); return; }
         foreach (Transform child in cameras.transform)
         {
             child.gameObject.SetActive(false);

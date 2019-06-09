@@ -2,7 +2,8 @@
 
 public class Utils
 {
-    public const string tagBackground = "Circular_Background";
+    public const string TagBackground = "Circular_Background";
+    public const string TagPlayer = "Player";
 }
 
 public class ImmutableDoublyLinkedList<T>
