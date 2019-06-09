@@ -215,7 +215,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 2.95, y: -29.3, z: 0}
 --- !u!1 &534669902
 GameObject:
@@ -299,6 +299,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1895746754}
   m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &714349089
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 714349090}
+  m_Layer: 0
+  m_Name: rocket2Shot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &714349090
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714349089}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1799328731}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &953075750
 PrefabInstance:
@@ -574,7 +604,7 @@ Transform:
   m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1353600560
 MonoBehaviour:
@@ -623,7 +653,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1866544091}
+    m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 100070, guid: f8459738d05d0a749b1a2487a9d8ca88, type: 3}
       propertyPath: m_Name
@@ -1019,8 +1049,9 @@ Transform:
   - {fileID: 1895746754}
   - {fileID: 32182277}
   - {fileID: 1427851314}
+  - {fileID: 714349090}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1799328732
 MonoBehaviour:
@@ -1040,6 +1071,8 @@ MonoBehaviour:
   cameraSwitchRate: 0.5
   rocket1: {fileID: 4846516266908086113, guid: 6f6f55d1c7bcdb4439ae93a83fca02c2, type: 3}
   rocket1Shot: {fileID: 1427851314}
+  rocket2: {fileID: 5321511392138099100, guid: 97505c2cc67c81c4bbb9fe45d6ad2c61, type: 3}
+  rocket2Shot: {fileID: 714349090}
   fireRate: 1
 --- !u!54 &1799328733
 Rigidbody:
@@ -1132,7 +1165,7 @@ Transform:
   m_Children:
   - {fileID: 953075751}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -5.24, y: -29.95, z: 33.73}
 --- !u!114 &1976224302
 MonoBehaviour:
@@ -1255,7 +1288,7 @@ Transform:
   m_LocalScale: {x: 30, y: 30, z: 30}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8898515453412456022
 PrefabInstance:
