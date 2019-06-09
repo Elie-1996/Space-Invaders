@@ -44,7 +44,7 @@ public class Boundary : MonoBehaviour
         }
         else
         {
-            Destroy(other);
+            Destroy(other.gameObject);
         }
     }
 }
