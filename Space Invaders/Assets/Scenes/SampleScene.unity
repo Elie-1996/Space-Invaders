@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.40303722, g: 0.4236848, b: 0.42514268, a: 1}
+  m_IndirectSpecularColor: {r: 0.40303728, g: 0.42368498, b: 0.42514232, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -371,7 +371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: f8459738d05d0a749b1a2487a9d8ca88, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: f8459738d05d0a749b1a2487a9d8ca88, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1241,6 +1241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387e399b7d30609449e64e35c3c78e47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosion: {fileID: 1627199668855820729, guid: 96a8d1135a4697c44bd614e365fc3574,
+    type: 3}
 --- !u!65 &1976224305
 BoxCollider:
   m_ObjectHideFlags: 0

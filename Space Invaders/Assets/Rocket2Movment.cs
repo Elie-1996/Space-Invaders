@@ -5,6 +5,8 @@ using UnityEngine;
 public class Rocket2Movment : MonoBehaviour
 {
     public float speed;
+    private Vector3 origin;
+    private Vector3 distance;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,11 +17,16 @@ public class Rocket2Movment : MonoBehaviour
             return;
         }
         rigidbody.velocity = transform.forward * speed;
+        origin = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        distance = transform.position - origin;
+        if (distance.x > 20 || distance.y > 20 || distance.z > 20)
+        {
+            Destroy(gameObject);
+        }
     }
 }

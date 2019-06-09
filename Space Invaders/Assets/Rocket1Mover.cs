@@ -5,6 +5,8 @@ using UnityEngine;
 public class Rocket1Mover : MonoBehaviour
 {
     public float speed;
+    private Vector3 origin;
+    private Vector3 distance;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,12 +16,17 @@ public class Rocket1Mover : MonoBehaviour
             Debug.LogError(gameObject.name + " (Movement.cs): No Rigidbody component was found!");
             return;
         }
-        rigidbody.velocity = transform.up  * speed;
+        rigidbody.velocity = transform.up * speed;
+        origin = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        distance = transform.position - origin;
+        if (distance.x > 20 || distance.y > 20 || distance.z > 20)
+        {
+            Destroy(gameObject);
+        }
     }
 }
