@@ -2,7 +2,7 @@
 
 public class Utils
 {
-
+    public const string tagBackground = "Circular_Background";
 }
 
 public class ImmutableDoublyLinkedList<T>

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SecondaryCamera
   - Cameras
+  - Circular_Background
   layers:
   - Default
   - TransparentFX
