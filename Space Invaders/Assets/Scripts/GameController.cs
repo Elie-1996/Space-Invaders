@@ -60,7 +60,8 @@ public class GameController : MonoBehaviour
     {
         for (int i = 0; i < amount; ++i)
         {
-            Instantiate(EnemyPrefab, planet.position, Quaternion.identity);
+            //TODO: Avoiding to actually instantiate until movement is decided
+            //Instantiate(EnemyPrefab, planet.position, Quaternion.identity);
             yield return new WaitForSeconds(enemyIntervalSpawnWaitSeconds);
         }
     }
