@@ -7,7 +7,7 @@ public class DestroyEnemy : MonoBehaviour
     public GameObject explosion;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == Utils.TagBackground || (other.tag == Utils.TagAstroid && tag == Utils.TagAstroid))
+        if (other.tag == Utils.TagBackground || (other.tag == Utils.TagAsteroid && tag == Utils.TagAsteroid))
         {
             return;
         }

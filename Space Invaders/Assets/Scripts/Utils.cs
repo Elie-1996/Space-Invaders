@@ -5,7 +5,7 @@ public class Utils
 {
     public const string TagBackground = "Circular_Background";
     public const string TagPlayer = "Player";
-    public const string TagAstroid = "Astroid";
+    public const string TagAsteroid = "Asteroid";
 
     private static Vector3 asteroidDirection;
 
