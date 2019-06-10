@@ -10,10 +10,10 @@ public class Boundary : MonoBehaviour
     {
         if (player == null)
         {
-            Debug.LogError(typeof(Boundary).Name + ", Fatal error: No player GameObject provided.");
+            Debug.LogError(typeof(Boundary).Name + ": Fatal error: No player GameObject provided.");
             // we need this in order to prevent the player from going out of bounds
             // and safe-gaurding against unwanted advantageous glitches.
-            throw new MissingComponentException();
+            throw new MissingReferenceException();
         }
     }
 
@@ -21,7 +21,7 @@ public class Boundary : MonoBehaviour
     {
         SphereCollider collider = GetComponent<SphereCollider>();
         // same reason for throwing as in function Start().
-        if (collider == null) { Debug.LogError(typeof(Boundary).Name + ", Fatal error: No boundary collider found!"); throw new MissingComponentException(); }
+        if (collider == null) { Debug.LogError(typeof(Boundary).Name + ", Fatal error: No boundary collider found!"); throw new MissingReferenceException(); }
         Vector3 closestPoint = collider.ClosestPoint(player.transform.position);
         float distance = Vector3.Distance(closestPoint, player.transform.position);
         if (distance > 0)
