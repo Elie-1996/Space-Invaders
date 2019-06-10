@@ -7,10 +7,13 @@ public class GameController : MonoBehaviour
     public GameObject gameBackground;
     public GameObject Planets;
     public GameObject AsteroidPrefab;
+    public GameObject EnemyPrefab;
     public Transform playerTransform;
     public float asteroidSpawnWaitSeconds;
+    public float enemyIntervalSpawnWaitSeconds;
 
     private int maxAllowedLevels;
+    private bool shouldAdvanceLevel = false;
     private int level;
 
     // Start is called before the first frame update
@@ -19,9 +22,74 @@ public class GameController : MonoBehaviour
         if (Planets == null || gameBackground == null || AsteroidPrefab == null || playerTransform == null) throw new MissingReferenceException();
         maxAllowedLevels = Planets.transform.childCount;
         level = 1;
+        shouldAdvanceLevel = false;
         InitiatePlanetLocations();
-        SpawnPlanets();
-        StartCoroutine(SpawnAsteroids());
+        StartCoroutine (LevelSystem());
+        StartCoroutine (SpawnAsteroids());
+    }
+
+    IEnumerator LevelSystem()
+    {
+        while (level < maxAllowedLevels)
+        {
+            shouldAdvanceLevel = false;
+            SpawnPlanets();
+            StartCoroutine (SpawnLevel(level));
+            ++level;
+            yield return new WaitUntil(()=> shouldAdvanceLevel == true);
+        }
+        // Win Game! => Define Behaviour!
+    }
+
+    IEnumerator SpawnLevel(int level)
+    {
+        int enemisAlive = 0;
+        // spawn some enemies
+        foreach (Transform child in Planets.transform)
+        {
+            if (child.gameObject.activeSelf == false) continue;
+            int enemiesToAdd = level * 3;
+            enemisAlive += enemiesToAdd;
+            StartCoroutine (SpawnEnemiesFromPlanet(child, enemiesToAdd));
+        }
+        yield return new WaitUntil(() => enemisAlive == 0);
+        shouldAdvanceLevel = true;
+    }
+    
+    IEnumerator SpawnEnemiesFromPlanet(Transform planet, int amount)
+    {
+        for (int i = 0; i < amount; ++i)
+        {
+            Instantiate(EnemyPrefab, planet.position, Quaternion.identity);
+            yield return new WaitForSeconds(enemyIntervalSpawnWaitSeconds);
+        }
+    }
+
+    void SpawnPlanets()
+    {
+        int currentLevel = level;
+        if (currentLevel <= 0 || currentLevel > maxAllowedLevels) return;
+        foreach (Transform child in Planets.transform)
+        {
+            if (currentLevel == 0) break;
+            child.gameObject.SetActive(true);
+            currentLevel--;
+        }
+    }
+
+    void InitiatePlanetLocations()
+    {
+        float radius = Utils.getGameBoundaryRadius(gameBackground) + 25.0f;
+        foreach (Transform child in Planets.transform)
+        {
+            GameObject planet = child.gameObject;
+            // generate random location
+            Vector3 direction = Utils.getRandomDirection();
+
+            // assign random location
+            planet.transform.position = direction * radius;
+            planet.SetActive(false);
+        }
     }
 
     IEnumerator SpawnAsteroids()
@@ -66,7 +134,6 @@ public class GameController : MonoBehaviour
                 Instantiate(AsteroidPrefab, startSpawnVariant9 + inc, Quaternion.identity);
         }
 
-
         // spawn endless Asteroids from startSpawn
         while (true)
         {
@@ -94,29 +161,4 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void InitiatePlanetLocations()
-    {
-        float radius = Utils.getGameBoundaryRadius(gameBackground) + 25.0f;
-        foreach (Transform child in Planets.transform)
-        {
-            GameObject planet = child.gameObject;
-            // generate random location
-            Vector3 direction = Utils.getRandomDirection();
-
-            // assign random location
-            planet.transform.position = direction * radius;
-            planet.SetActive(false);
-        }
-    }
-
-    void SpawnPlanets()
-    {
-        if (level <= 0 || level > maxAllowedLevels) return;
-        foreach (Transform child in Planets.transform)
-        {
-            if (level == 0) break;
-            child.gameObject.SetActive(true);
-            level--;
-        }
-    }
 }
