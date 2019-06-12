@@ -153,8 +153,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 9
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.9579447, g: 1, b: 0.41037738, a: 1}
+  m_Intensity: 0.4
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1211,7 +1211,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 327c0f2bb5a3f5843bf055851e42e23c, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.54
   m_Pitch: 1
   Loop: 0
@@ -1825,7 +1825,7 @@ Transform:
   - {fileID: 1503968694}
   - {fileID: 814293044}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1655137212
 GameObject:
@@ -2307,10 +2307,9 @@ Transform:
   m_LocalRotation: {x: -0.11714739, y: -0.23421423, z: 0.26866814, w: 0.92695075}
   m_LocalPosition: {x: 0, y: 0, z: 4.64}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 953075751}
+  m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -5.24, y: -29.95, z: 33.73}
 --- !u!114 &1976224302
 MonoBehaviour:
@@ -2324,10 +2323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e0724b4807d31429965514f8baf629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Center: {fileID: 1799328731}
-  motion: 0
-  speed: 1
-  startDistance: 1
 --- !u!54 &1976224303
 Rigidbody:
   m_ObjectHideFlags: 0
