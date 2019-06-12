@@ -121,16 +121,8 @@ public class GameController : MonoBehaviour
     IEnumerator SpawnAsteroids()
     {
         float radius = Utils.getBackgroundRadius(gameBackground);
+        float distance = 12.0f;
         Vector3 startSpawn = Utils.getRandomDirection() * radius;
-        Vector3 startSpawnVariant1 = startSpawn + new Vector3(1.0f, 3.0f, 2.0f) * 2;
-        Vector3 startSpawnVariant2 = startSpawn - new Vector3(3.0f, 2.0f, 1.0f) * 2;
-        Vector3 startSpawnVariant3 = startSpawn + new Vector3(2.0f, 2.0f, 1.0f) * 2;
-        Vector3 startSpawnVariant4 = startSpawn - new Vector3(2.0f, 2.0f, 1.0f) * 2;
-        Vector3 startSpawnVariant5 = startSpawn - new Vector3(1.8f, 2.4f, 1.9f) * 2;
-        Vector3 startSpawnVariant6 = startSpawn - new Vector3(3.2f, 5.2f, 4.3f) * 2;
-        Vector3 startSpawnVariant7 = startSpawn - new Vector3(2.3f, 2.9f, 4.1f) * 2;
-        Vector3 startSpawnVariant8 = startSpawn - new Vector3(0.0f, 1.0f, 3.0f) * 2;
-        Vector3 startSpawnVariant9 = startSpawn - new Vector3(0.5f, 2.0f, 3.0f) * 2;
         Vector3 direction = ((playerTransform.position + new Vector3(15.0f, 15.0f, 15.0f))- startSpawn).normalized;
         Utils.setAsteroidDirection(direction);
         
@@ -140,24 +132,19 @@ public class GameController : MonoBehaviour
             Vector3 inc = new Vector3(direction.x * i, direction.y * i, direction.z * i);
             if (Random.value <= 0.5)
                 Instantiate(AsteroidPrefab, startSpawn + inc, Quaternion.identity);
+
+            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+
+           
             if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant1 + inc, Quaternion.identity);
-            else
-                Instantiate(AsteroidPrefab, startSpawnVariant3 + inc, Quaternion.identity);
-            if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant2 + inc, Quaternion.identity);
-            else
-                Instantiate(AsteroidPrefab, startSpawnVariant4 + inc, Quaternion.identity);
-            if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant5 + inc, Quaternion.identity);
-            else
-                Instantiate(AsteroidPrefab, startSpawnVariant6 + inc, Quaternion.identity);
-            if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant7 + inc, Quaternion.identity);
-            else
-                Instantiate(AsteroidPrefab, startSpawnVariant8 + inc, Quaternion.identity);
-            if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant9 + inc, Quaternion.identity);
+                Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
         }
 
         // spawn endless Asteroids from startSpawn
@@ -165,24 +152,20 @@ public class GameController : MonoBehaviour
         {
             if (Random.value <= 0.5)
                 Instantiate(AsteroidPrefab, startSpawn, Quaternion.identity);
+
+            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+
+
             if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant1, Quaternion.identity);
-            else
-                Instantiate(AsteroidPrefab, startSpawnVariant3, Quaternion.identity);
-            if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant2, Quaternion.identity);
-            else
-                Instantiate(AsteroidPrefab, startSpawnVariant4, Quaternion.identity);
-            if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant5, Quaternion.identity);
-            else
-                Instantiate(AsteroidPrefab, startSpawnVariant6, Quaternion.identity);
-            if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant7, Quaternion.identity);
-            else
-                Instantiate(AsteroidPrefab, startSpawnVariant8, Quaternion.identity);
-            if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawnVariant9, Quaternion.identity);
+                Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+
             yield return new WaitForSeconds(asteroidSpawnWaitSeconds);
             if (gameOver)
             {
