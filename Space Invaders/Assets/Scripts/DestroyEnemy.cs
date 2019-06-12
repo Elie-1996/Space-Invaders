@@ -40,7 +40,8 @@ public class DestroyEnemy : MonoBehaviour
                     Destroy(explosion);
                 }
                 Instantiate(rocke2Explosion, other.transform.position, other.transform.rotation);
-                Destroy(explosion);
+                DestroyImmediate(explosion, true);
+                //Destroy(explosion);
                 gameController.addScore(score);
                 return;
             }

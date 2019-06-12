@@ -16,7 +16,7 @@ public class GameController : MonoBehaviour
     public Text gameOverText;
     public Text RestartText;
 
-
+    private GameObject circule;
     private bool gameOver;
     private bool restart;
     private int score;
@@ -207,5 +207,22 @@ public class GameController : MonoBehaviour
     public void GameOverFunction(){
         gameOverText.text = "Game Over!";
         gameOver = true;
+        AudioListener audioListener = GetComponent<AudioListener>();
+        audioListener.enabled = true;
+        AudioSource[] allAudioSources;
+        allAudioSources = FindObjectsOfType(typeof(AudioSource)) as AudioSource[];
+        foreach (AudioSource audioS in allAudioSources)
+        {
+            audioS.Stop();
+        }
+        //GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagBackground);
+        //if (gameConrollerObject != null)
+        //{
+        //    circule = gameConrollerObject.GetComponent<GameObject>();
+        //    AudioSource audio = circule.GetComponent<AudioSource>();
+        //    audio.Pause();
+        //}
+        AudioSource audioData = GetComponent<AudioSource>();
+        audioData.Play();
     }
 }

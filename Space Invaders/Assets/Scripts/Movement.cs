@@ -53,77 +53,83 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        if (showWelcomeMessage)
+        if (gameObject != null)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (showWelcomeMessage)
             {
-                Astro.enabled = false;
-                welcome.text = "";
-                welcomeMessage.text = "";
-                showWelcomeMessage = false;
-            }
-        }
-        else
-        {
-            AudioSource audioData;
-            SwitchActiveCamera();
-            if (Input.GetButton("Fire1") && Time.time > nextFire)
-            {
-                nextFire = Time.time + fireRate;
-                Instantiate(rocket1, rocket1Shot.position, rocket1Shot.rotation);
-                audioData = GetComponent<AudioSource>();
-                audioData.Play(0);
-            }
-            if (stopwatch.ElapsedMilliseconds < 7 * 1000 && canShootRocket2)
-            {
-                if (Input.GetButton("Fire2") && Time.time > nextFire)
+                if (Input.GetKeyDown(KeyCode.Return))
                 {
-                    nextFire = Time.time + fireRate;
-                    Instantiate(rocket2, rocket2Shot.position, rocket2Shot.rotation);
-                    audioData = GetComponent<AudioSource>();
-                    audioData.Play(0);
+                    Astro.enabled = false;
+                    welcome.text = "";
+                    welcomeMessage.text = "";
+                    showWelcomeMessage = false;
                 }
-            }
-            else if (stopwatch.ElapsedMilliseconds > 10 * 1000 && !canShootRocket2)
-            {
-                stopwatch = Stopwatch.StartNew();
-                rocket2Text.color = new Color(1, 0, 0);
-                rocket2Text.text = "Master Rocket is AVAILABLE NOW, USE IT";
-                canShootRocket2 = true;
             }
             else
             {
-                if (canShootRocket2) { stopwatch = Stopwatch.StartNew(); }
-                rocket2Text.color = new Color(0.67f, 0.67f, 0.19f);
-                rocket2Text.text = "Master Rocket is not available now, wait to reload rockets!";
-                canShootRocket2 = false;
+                AudioSource audioData;
+                SwitchActiveCamera();
+                if (Input.GetButton("Fire1") && Time.time > nextFire)
+                {
+                    nextFire = Time.time + fireRate;
+                    Instantiate(rocket1, rocket1Shot.position, rocket1Shot.rotation);
+                    audioData = GetComponent<AudioSource>();
+                    audioData.Play(0);
+                }
+                if (stopwatch.ElapsedMilliseconds < 7 * 1000 && canShootRocket2)
+                {
+                    if (Input.GetButton("Fire2") && Time.time > nextFire)
+                    {
+                        nextFire = Time.time + fireRate;
+                        Instantiate(rocket2, rocket2Shot.position, rocket2Shot.rotation);
+                        audioData = GetComponent<AudioSource>();
+                        audioData.Play(0);
+                    }
+                }
+                else if (stopwatch.ElapsedMilliseconds > 10 * 1000 && !canShootRocket2)
+                {
+                    stopwatch = Stopwatch.StartNew();
+                    rocket2Text.color = new Color(1, 0, 0);
+                    rocket2Text.text = "Master Rocket is AVAILABLE NOW, USE IT";
+                    canShootRocket2 = true;
+                }
+                else
+                {
+                    if (canShootRocket2) { stopwatch = Stopwatch.StartNew(); }
+                    rocket2Text.color = new Color(0.67f, 0.67f, 0.19f);
+                    rocket2Text.text = "Master Rocket is not available now, wait to reload rockets!";
+                    canShootRocket2 = false;
+                }
             }
         }
     }
     private void FixedUpdate()
     {
-        if (showWelcomeMessage)
+        if (gameObject != null)
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (showWelcomeMessage)
             {
-                Astro.enabled = false;
-                welcome.text = "";
-                welcomeMessage.text = "";
-                showWelcomeMessage = false;
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    Astro.enabled = false;
+                    welcome.text = "";
+                    welcomeMessage.text = "";
+                    showWelcomeMessage = false;
+                }
             }
-        }
-        else
-        {
-            Rigidbody rigidbody = GetComponent<Rigidbody>();
-            if (rigidbody == null)
+            else
             {
-                UnityEngine.Debug.LogError(gameObject.name + " (" + typeof(Movement).Name + "): No Rigidbody component was found!");
-                return;
-            }
+                Rigidbody rigidbody = GetComponent<Rigidbody>();
+                if (rigidbody == null)
+                {
+                    UnityEngine.Debug.LogError(gameObject.name + " (" + typeof(Movement).Name + "): No Rigidbody component was found!");
+                    return;
+                }
 
-            HandleMovement(rigidbody);
-            HandleRotation(rigidbody);
-            rigidbody.freezeRotation = true;
+                HandleMovement(rigidbody);
+                HandleRotation(rigidbody);
+                rigidbody.freezeRotation = true;
+            }
         }
     }
 

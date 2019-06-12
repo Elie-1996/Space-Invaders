@@ -19,20 +19,23 @@ public class Boundary : MonoBehaviour
 
     private void FixedUpdate()
     {
-        SphereCollider collider = GetComponent<SphereCollider>();
-        // same reason for throwing as in function Start().
-        if (collider == null) { Debug.LogError(typeof(Boundary).Name + ", Fatal error: No boundary collider found!"); throw new MissingReferenceException(); }
-        Vector3 closestPoint = collider.ClosestPoint(player.transform.position);
-        float distance = Vector3.Distance(closestPoint, player.transform.position);
-        if (distance > 0)
+        if (player != null)
         {
-            Debug.DrawLine(closestPoint, player.transform.position);
-            Debug.Log("You are outside the legal boundaries! (distance =" + distance + ", radius = " + collider.radius + ")");
-        }
-        if (distance >= 100)
-        {
-            Debug.Log("Went to far away into illegal territory. You should be dead!");
-            // kill self
+            SphereCollider collider = GetComponent<SphereCollider>();
+            // same reason for throwing as in function Start().
+            if (collider == null) { Debug.LogError(typeof(Boundary).Name + ", Fatal error: No boundary collider found!"); throw new MissingReferenceException(); }
+            Vector3 closestPoint = collider.ClosestPoint(player.transform.position);
+            float distance = Vector3.Distance(closestPoint, player.transform.position);
+            if (distance > 0)
+            {
+                Debug.DrawLine(closestPoint, player.transform.position);
+                Debug.Log("You are outside the legal boundaries! (distance =" + distance + ", radius = " + collider.radius + ")");
+            }
+            if (distance >= 100)
+            {
+                Debug.Log("Went to far away into illegal territory. You should be dead!");
+                // kill self
+            }
         }
     }
 
