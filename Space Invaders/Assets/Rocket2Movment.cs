@@ -43,10 +43,8 @@ public class Rocket2Movment : MonoBehaviour
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
                     Destroy(collider.gameObject);
-                    Destroy(explosion);
                 }
                 Instantiate(rocke2Explosion, transform.position, transform.rotation);
-                Destroy(explosion);
                 gameController.addScore(score);
                 return;
             }

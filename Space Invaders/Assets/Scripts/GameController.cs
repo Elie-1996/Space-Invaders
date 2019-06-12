@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -12,9 +13,14 @@ public class GameController : MonoBehaviour
     public Transform playerTransform;
     public float asteroidSpawnWaitSeconds;
     public float enemyIntervalSpawnWaitSeconds;
-    public Text scoreText;
-    public Text gameOverText;
-    public Text RestartText;
+    public Canvas canvas;
+    public Text scoreTextPrefab;
+    public Text gameOverTextPrefab;
+    public Text RestartTextPrefab;
+
+    private GameObject _scoreText;
+    private GameObject _gameOverText;
+    private GameObject _RestartText;
 
     private GameObject circule;
     private bool gameOver;
@@ -23,16 +29,35 @@ public class GameController : MonoBehaviour
     private int maxAllowedLevels;
     private bool shouldAdvanceLevel = false;
     private int level;
+
+    void loadGUI()
+    {
+        GameObject canvasObject = Instantiate(canvas).gameObject;
+        RectTransform rTransform = canvasObject.GetComponent<RectTransform>();
+
+        _scoreText = Instantiate(scoreTextPrefab.gameObject);
+        _scoreText.transform.SetParent(rTransform, false);
+
+        _gameOverText = Instantiate(gameOverTextPrefab.gameObject);
+        _gameOverText.transform.SetParent(rTransform, false);
+
+        _RestartText = Instantiate(RestartTextPrefab.gameObject);
+        _RestartText.transform.SetParent(rTransform, false);
+
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         if (Planets == null || gameBackground == null || AsteroidPrefab == null || playerTransform == null) throw new MissingReferenceException();
+        loadGUI();
         score = 0;
         updateScore();
         gameOver = false;
         restart = false;
-        gameOverText.text = "";
-        RestartText.text = "";
+        _gameOverText.GetComponent<Text>().text = "";
+        _RestartText.GetComponent<Text>().text = "";
 
         maxAllowedLevels = Planets.transform.childCount;
         level = 1;
@@ -114,7 +139,7 @@ public class GameController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Application.LoadLevel(Application.loadedLevel);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
     }
@@ -126,7 +151,7 @@ public class GameController : MonoBehaviour
         Vector3 direction = ((playerTransform.position + new Vector3(15.0f, 15.0f, 15.0f))- startSpawn).normalized;
         Utils.setAsteroidDirection(direction);
         
-        // spawn the first 1000
+        // spawn the first 800
         for (int i = 0; i < 800; i+=5)
         {
             Vector3 inc = new Vector3(direction.x * i, direction.y * i, direction.z * i);
@@ -137,12 +162,7 @@ public class GameController : MonoBehaviour
             Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
             Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
             Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
 
-           
             if (Random.value <= 0.5)
                 Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
         }
@@ -157,28 +177,18 @@ public class GameController : MonoBehaviour
             Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
             Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
             Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
 
             if (Random.value <= 0.5)
                 Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
             yield return new WaitForSeconds(asteroidSpawnWaitSeconds);
-            if (gameOver)
-            {
-                RestartText.text = "Press 'R' for restart";
-                restart = true;
-                break;
-            }
         }
     }
 
     void updateScore()
     {
-        scoreText.text = "Score: " + score;
+        _scoreText.GetComponent<Text>().text = "Score: " + score;
     }
 
     public void addScore (int newScore)
@@ -188,7 +198,9 @@ public class GameController : MonoBehaviour
     }
 
     public void GameOverFunction(){
-        gameOverText.text = "Game Over!";
+        _gameOverText.GetComponent<Text>().text = "Game Over!";
+        _RestartText.GetComponent<Text>().text = "Press 'R' for restart";
+        restart = true;
         gameOver = true;
         AudioListener audioListener = GetComponent<AudioListener>();
         audioListener.enabled = true;
@@ -198,13 +210,6 @@ public class GameController : MonoBehaviour
         {
             audioS.Stop();
         }
-        //GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagBackground);
-        //if (gameConrollerObject != null)
-        //{
-        //    circule = gameConrollerObject.GetComponent<GameObject>();
-        //    AudioSource audio = circule.GetComponent<AudioSource>();
-        //    audio.Pause();
-        //}
         AudioSource audioData = GetComponent<AudioSource>();
         audioData.Play();
     }

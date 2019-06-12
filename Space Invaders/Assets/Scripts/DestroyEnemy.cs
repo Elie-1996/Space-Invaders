@@ -37,11 +37,8 @@ public class DestroyEnemy : MonoBehaviour
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
                     Destroy(collider.gameObject);
-                    Destroy(explosion);
                 }
                 Instantiate(rocke2Explosion, other.transform.position, other.transform.rotation);
-                DestroyImmediate(explosion, true);
-                //Destroy(explosion);
                 gameController.addScore(score);
                 return;
             }
@@ -50,7 +47,6 @@ public class DestroyEnemy : MonoBehaviour
         gameController.addScore(score);
         Instantiate(explosion, other.transform.position, other.transform.rotation);
         Destroy(other.gameObject);
-        Destroy(explosion);
         Destroy(gameObject);
     }
 }
