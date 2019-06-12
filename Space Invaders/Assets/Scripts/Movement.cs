@@ -13,6 +13,9 @@ public class Movement : MonoBehaviour
     public Text rocket2Text;
     private float camSwitchTime;
     public RawImage Astro;
+    public RawImage masterRocket1;
+    public RawImage masterRocket2;
+    public RawImage masterRocket3;
     public Text welcome;
     public Text welcomeMessage;
     private bool showWelcomeMessage;
@@ -25,6 +28,7 @@ public class Movement : MonoBehaviour
     private float nextFire;
     private Stopwatch stopwatch;
     private bool canShootRocket2;
+    private int masterRocketsCount;
     private void Start()
     {
         camSwitchTime = Time.time;
@@ -33,7 +37,11 @@ public class Movement : MonoBehaviour
         SetActiveCameras();
         stopwatch = Stopwatch.StartNew();
         rocket2Text.color = new Color(1, 0, 0);
-        rocket2Text.text = "Master Rocket is AVAILABLE NOW, USE IT";
+        rocket2Text.text = "";
+        masterRocket1.enabled = true;
+        masterRocket2.enabled = true;
+        masterRocket3.enabled = true;
+        masterRocketsCount = 3;
         canShootRocket2 = true;
         Astro.enabled = true;
         welcome.text = "Welcome to BE in space";
@@ -76,7 +84,7 @@ public class Movement : MonoBehaviour
                     audioData = GetComponent<AudioSource>();
                     audioData.Play(0);
                 }
-                if (stopwatch.ElapsedMilliseconds < 7 * 1000 && canShootRocket2)
+                if (stopwatch.ElapsedMilliseconds < 7 * 1000 && canShootRocket2 && masterRocketsCount !=0)
                 {
                     if (Input.GetButton("Fire2") && Time.time > nextFire)
                     {
@@ -84,20 +92,26 @@ public class Movement : MonoBehaviour
                         Instantiate(rocket2, rocket2Shot.position, rocket2Shot.rotation);
                         audioData = GetComponent<AudioSource>();
                         audioData.Play(0);
+                        turnOffRocketsImage();
+                        masterRocketsCount--;
                     }
                 }
                 else if (stopwatch.ElapsedMilliseconds > 10 * 1000 && !canShootRocket2)
                 {
                     stopwatch = Stopwatch.StartNew();
                     rocket2Text.color = new Color(1, 0, 0);
-                    rocket2Text.text = "Master Rocket is AVAILABLE NOW, USE IT";
+                    rocket2Text.text = "";
+                    masterRocket1.enabled = true;
+                    masterRocket2.enabled = true;
+                    masterRocket3.enabled = true;
+                    masterRocketsCount = 3;
                     canShootRocket2 = true;
                 }
                 else
                 {
                     if (canShootRocket2) { stopwatch = Stopwatch.StartNew(); }
                     rocket2Text.color = new Color(0.67f, 0.67f, 0.19f);
-                    rocket2Text.text = "Master Rocket is not available now, wait to reload rockets!";
+                    rocket2Text.text = "";
                     canShootRocket2 = false;
                 }
             }
@@ -164,5 +178,20 @@ public class Movement : MonoBehaviour
                 child.gameObject.SetActive(true);
             }
         }
+    }
+    private void turnOffRocketsImage()
+    {
+        if (masterRocketsCount == 3)
+        {
+            masterRocket3.enabled = false;
+            return;
+        }
+        else if (masterRocketsCount == 2)
+        {
+            masterRocket2.enabled = false;
+            return;
+        }
+        else
+            masterRocket1.enabled = false;
     }
 }
