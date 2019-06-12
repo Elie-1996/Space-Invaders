@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -11,21 +12,35 @@ public class GameController : MonoBehaviour
     public Transform playerTransform;
     public float asteroidSpawnWaitSeconds;
     public float enemyIntervalSpawnWaitSeconds;
+    public Text scoreText;
+    public Text gameOverText;
+    public Text RestartText;
 
+
+    private bool gameOver;
+    private bool restart;
+    private int score;
     private int maxAllowedLevels;
     private bool shouldAdvanceLevel = false;
     private int level;
-
     // Start is called before the first frame update
     void Start()
     {
         if (Planets == null || gameBackground == null || AsteroidPrefab == null || playerTransform == null) throw new MissingReferenceException();
+        score = 0;
+        updateScore();
+        gameOver = false;
+        restart = false;
+        gameOverText.text = "";
+        RestartText.text = "";
+
         maxAllowedLevels = Planets.transform.childCount;
         level = 1;
         shouldAdvanceLevel = false;
         InitiatePlanetLocations();
         StartCoroutine (LevelSystem());
         StartCoroutine (SpawnAsteroids());
+
     }
 
     IEnumerator LevelSystem()
@@ -93,6 +108,16 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (restart)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Application.LoadLevel(Application.loadedLevel);
+            }
+        }
+    }
     IEnumerator SpawnAsteroids()
     {
         float radius = Utils.getBackgroundRadius(gameBackground);
@@ -159,7 +184,28 @@ public class GameController : MonoBehaviour
             if (Random.value <= 0.5)
                 Instantiate(AsteroidPrefab, startSpawnVariant9, Quaternion.identity);
             yield return new WaitForSeconds(asteroidSpawnWaitSeconds);
+            if (gameOver)
+            {
+                RestartText.text = "Press 'R' for restart";
+                restart = true;
+                break;
+            }
         }
     }
 
+    void updateScore()
+    {
+        scoreText.text = "Score: " + score;
+    }
+
+    public void addScore (int newScore)
+    {
+        score += newScore;
+        updateScore();
+    }
+
+    public void GameOverFunction(){
+        gameOverText.text = "Game Over!";
+        gameOver = true;
+    }
 }

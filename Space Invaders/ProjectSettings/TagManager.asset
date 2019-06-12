@@ -8,6 +8,8 @@ TagManager:
   - Cameras
   - Circular_Background
   - Asteroid
+  - Enemy
+  - Rocket2
   layers:
   - Default
   - TransparentFX

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5649482195121500469}
   m_Layer: 0
   m_Name: rocket2
-  m_TagString: Untagged
+  m_TagString: Rocket2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,6 +63,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
+  explosion: {fileID: 1627199668855820729, guid: 96a8d1135a4697c44bd614e365fc3574,
+    type: 3}
+  rocke2Explosion: {fileID: 4517798840485811100, guid: 55b13be727a5080469459c0de38e775e,
+    type: 3}
 --- !u!65 &5649482195121500469
 BoxCollider:
   m_ObjectHideFlags: 0

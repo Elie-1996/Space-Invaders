@@ -92,6 +92,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosion: {fileID: 1627199668855820729, guid: 96a8d1135a4697c44bd614e365fc3574,
     type: 3}
+  rocke2Explosion: {fileID: 4517798840485811100, guid: 55b13be727a5080469459c0de38e775e,
+    type: 3}
 --- !u!1 &1823410046707820737
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,9 +6,24 @@ public class Utils
     public const string TagBackground = "Circular_Background";
     public const string TagPlayer = "Player";
     public const string TagAsteroid = "Asteroid";
-
+    public const string TagEnemy = "Enemy";
+    public const string TagRocket2 = "Rocket2";
+    public const string TagGameConroller = "GameController";
+    public const int AsteroidScore = 1;
+    public const int EnemyScore = 10;
     private static Vector3 asteroidDirection;
-
+    public static int getScoreByCollider(string tag)
+    {
+        if (tag == Utils.TagAsteroid)
+        {
+            return Utils.AsteroidScore;
+        }
+        if (tag == Utils.TagEnemy)
+        {
+            return Utils.EnemyScore;
+        }
+        return 0;
+    }
     // returns the game's radius, though gameBackground should be the Circular_Background
     public static float getGameBoundaryRadius(GameObject gameBackground)
     {
@@ -89,5 +104,4 @@ public class ImmutableDoublyLinkedList<T>
             currentItem = 0;
         }
     }
-
 }
