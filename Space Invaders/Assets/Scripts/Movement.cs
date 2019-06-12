@@ -65,8 +65,6 @@ public class Movement : MonoBehaviour
     {
         loadUI();
         camSwitchTime = Time.time;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
         SetActiveCameras();
         stopwatch = Stopwatch.StartNew();
         rocket2Text.color = new Color(1, 0, 0);

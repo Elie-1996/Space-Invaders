@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour
     private int maxAllowedLevels;
     private bool shouldAdvanceLevel = false;
     private int level;
-
+    private bool escape;
     void loadGUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -65,7 +65,9 @@ public class GameController : MonoBehaviour
         InitiatePlanetLocations();
         StartCoroutine (LevelSystem());
         StartCoroutine (SpawnAsteroids());
-
+        escape = true;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     IEnumerator LevelSystem()
@@ -140,6 +142,23 @@ public class GameController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.R))
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+        }
+        if (escape)
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+                escape = false;
+            }
+        }
+        else {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+                escape = true;
             }
         }
     }
