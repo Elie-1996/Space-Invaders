@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Rocket2Movment : MonoBehaviour
+public class Rocket2Movment : NetworkBehaviour
 {
     public float speed;
     private Vector3 origin;
-    private Vector3 distance;
     public GameObject explosion;
     public GameObject rocke2Explosion;
     private GameController gameController;
+    private const float maxDistance = 20.0f;
     private void Start()
     {
         GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
@@ -20,18 +21,39 @@ public class Rocket2Movment : MonoBehaviour
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         if (rigidbody == null)
         {
-            Debug.LogError(gameObject.name + " (Movement.cs): No Rigidbody component was found!");
+            Debug.LogError(gameObject.name + " (Rocket2Mover.cs): No Rigidbody component was found!");
             return;
         }
-        rigidbody.velocity = transform.forward * speed;
         origin = transform.position;
+
+        CmdInitializeVelocity(transform.forward);
+    }
+
+
+    [Command]
+    private void CmdInitializeVelocity(Vector3 forward)
+    {
+        InitializeVelocityHelper(forward);
+        RpcInitializeVelocity(forward);
+    }
+
+    [ClientRpc]
+    private void RpcInitializeVelocity(Vector3 forward)
+    {
+        InitializeVelocityHelper(forward);
+    }
+
+    private void InitializeVelocityHelper(Vector3 forward)
+    {
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        rigidbody.velocity = forward * speed;
     }
 
     // Update is called once per frame
     void Update()
     {
-        distance = transform.position - origin;
-        if (distance.x > 20 || distance.y > 20 || distance.z > 20)
+        float distance = Vector3.Distance(transform.position, origin);
+        if (distance > maxDistance)
         {
             int score = 0;
             Collider[] radious = Physics.OverlapSphere(transform.position, 5f);

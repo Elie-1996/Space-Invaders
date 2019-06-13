@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Utils
 {
+    [SyncVar]
+    public static int amountOfPlayers = 0;
     public const string TagBackground = "Circular_Background";
     public const string TagPlayer = "Player";
     public const string TagAsteroid = "Asteroid";
