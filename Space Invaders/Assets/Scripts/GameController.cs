@@ -167,11 +167,11 @@ public class GameController : MonoBehaviour
         float radius = Utils.getBackgroundRadius(gameBackground);
         float distance = 12.0f;
         Vector3 startSpawn = Utils.getRandomDirection() * radius;
-        Vector3 direction = ((playerTransform.position + new Vector3(15.0f, 15.0f, 15.0f))- startSpawn).normalized;
+        Vector3 direction = ((playerTransform.position + new Vector3(35.0f, 35.0f, 35.0f))- startSpawn).normalized;
         Utils.setAsteroidDirection(direction);
         
         // spawn the first 800
-        for (int i = 0; i < 800; i+=5)
+        for (int i = 0; i < 750; i+=5)
         {
             Vector3 inc = new Vector3(direction.x * i, direction.y * i, direction.z * i);
             if (Random.value <= 0.5)
@@ -180,9 +180,8 @@ public class GameController : MonoBehaviour
             Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
             Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
             Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
 
-            if (Random.value <= 0.5)
+            if (Random.value <= 0.3)
                 Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
         }
 
@@ -195,10 +194,9 @@ public class GameController : MonoBehaviour
             Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
             Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
             Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
 
-            if (Random.value <= 0.5)
+            if (Random.value <= 0.3)
                 Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
             yield return new WaitForSeconds(asteroidSpawnWaitSeconds);
