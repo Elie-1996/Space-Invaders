@@ -2,38 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestroyEnemy : MonoBehaviour
+public class DestroyAsteroid : MonoBehaviour
 {
     public GameObject explosion;
     public GameObject rocke2Explosion;
     private GameController gameController;
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
         GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
-        if(gameConrollerObject != null)
+        if (gameConrollerObject != null)
         {
             gameController = gameConrollerObject.GetComponent<GameController>();
         }
-
     }
+
     private void OnTriggerEnter(Collider other)
     {
-        int score =0;
-        if (other.tag == Utils.TagBackground)
-        {
-            return;
-        }
-        if(other.tag == Utils.TagPlayer)
+        int score = 0;
+        if(other.tag == Utils.TagAsteroid || other.tag == Utils.TagBackground) { return; }
+        if (other.tag == Utils.TagPlayer)
         {
             gameController.GameOverFunction();
         }
         if (other.tag == Utils.TagRocket2)
         {
-           Collider[] radious =  Physics.OverlapSphere(other.transform.position, 10f);
-            if(radious!= null)
+            Collider[] radious = Physics.OverlapSphere(other.transform.position, 10f);
+            if (radious != null)
             {
-                foreach (Collider collider in radious) {
-                    if (collider.tag == Utils.TagBackground || collider.tag == Utils.TagGameConroller || collider.tag == Utils.TagPlayer) {continue;}
+                foreach (Collider collider in radious)
+                {
+                    if (collider.tag == Utils.TagBackground || collider.tag == Utils.TagGameConroller || collider.tag == Utils.TagPlayer) { continue; }
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
                     Destroy(collider.gameObject);
@@ -43,7 +42,7 @@ public class DestroyEnemy : MonoBehaviour
                 return;
             }
         }
-        score = Utils.getScoreByCollider(tag);
+        score = Utils.AsteroidScore;
         gameController.addScore(score);
         Instantiate(explosion, other.transform.position, other.transform.rotation);
         Destroy(other.gameObject);
