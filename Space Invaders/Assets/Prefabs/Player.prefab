@@ -1006,6 +1006,8 @@ MonoBehaviour:
     type: 3}
   masterRocket3Prefab: {fileID: 7240755318108709337, guid: 94548e8c8a96db842b9704328f28513a,
     type: 3}
+  masterRocketExtraPrefab: {fileID: 3607851354971044927, guid: d16cdafb91cfcb241aecadf7b517e2d2,
+    type: 3}
   welcomePrefab: {fileID: 2821719767976942641, guid: fe53af7d36fe7e74aabc195cd6c08397,
     type: 3}
   welcomeMessagePrefab: {fileID: 1348936879879372975, guid: 7cbeda87de83c454f96f72e7250603eb,

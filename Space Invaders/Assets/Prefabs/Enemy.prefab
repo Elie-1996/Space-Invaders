@@ -78,6 +78,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosion: {fileID: 1627199668855820729, guid: 96a8d1135a4697c44bd614e365fc3574,
     type: 3}
+  rocke2Explosion: {fileID: 4517798840485811100, guid: 55b13be727a5080469459c0de38e775e,
+    type: 3}
+  woodBox: {fileID: 5844329388482103422, guid: a08fde3f071d5a1479fe09847a329032, type: 3}
 --- !u!114 &1161068479461717633
 MonoBehaviour:
   m_ObjectHideFlags: 0

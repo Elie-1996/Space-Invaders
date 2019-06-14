@@ -6,6 +6,7 @@ public class DestroyEnemy : MonoBehaviour
 {
     public GameObject explosion;
     public GameObject rocke2Explosion;
+    public GameObject woodBox;
     private GameController gameController;
     private void Start()
     {
@@ -19,7 +20,7 @@ public class DestroyEnemy : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         int score =0;
-        if (other.tag == Utils.TagBackground)
+        if (other.tag == Utils.TagBackground || other.tag == Utils.TagWoodBox)
         {
             return;
         }
@@ -46,6 +47,7 @@ public class DestroyEnemy : MonoBehaviour
         score = Utils.getScoreByCollider(tag);
         gameController.addScore(score);
         Instantiate(explosion, other.transform.position, other.transform.rotation);
+        Instantiate(woodBox, transform.position, transform.rotation);
         Destroy(other.gameObject);
         Destroy(gameObject);
     }

@@ -31,6 +31,23 @@ public class GameController : MonoBehaviour
     private int level;
     private bool escape;
 
+    private bool extraRocket;
+    void loadGUI()
+    {
+        GameObject canvasObject = Instantiate(canvas).gameObject;
+        RectTransform rTransform = canvasObject.GetComponent<RectTransform>();
+
+        _scoreText = Instantiate(scoreTextPrefab.gameObject);
+        _scoreText.transform.SetParent(rTransform, false);
+
+        _gameOverText = Instantiate(gameOverTextPrefab.gameObject);
+        _gameOverText.transform.SetParent(rTransform, false);
+
+        _RestartText = Instantiate(RestartTextPrefab.gameObject);
+        _RestartText.transform.SetParent(rTransform, false);
+
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +67,6 @@ public class GameController : MonoBehaviour
         InitiatePlanetLocations();
         StartCoroutine (LevelSystem());
         //StartCoroutine(SpawnAsteroids());
-
         escape = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -216,19 +232,7 @@ public class GameController : MonoBehaviour
         AudioSource audioData = GetComponent<AudioSource>();
         audioData.Play();
     }
+    public void setExtraRocket(bool status) { extraRocket = status; }
+    public bool getExtraRocketStatus() { return extraRocket; }
 
-    void loadGUI()
-    {
-        GameObject canvasObject = Instantiate(canvas).gameObject;
-        RectTransform rTransform = canvasObject.GetComponent<RectTransform>();
-
-        _scoreText = Instantiate(scoreTextPrefab.gameObject);
-        _scoreText.transform.SetParent(rTransform, false);
-
-        _gameOverText = Instantiate(gameOverTextPrefab.gameObject);
-        _gameOverText.transform.SetParent(rTransform, false);
-
-        _RestartText = Instantiate(RestartTextPrefab.gameObject);
-        _RestartText.transform.SetParent(rTransform, false);
-    }
 }

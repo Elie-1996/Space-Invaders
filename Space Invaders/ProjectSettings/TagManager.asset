@@ -11,6 +11,7 @@ TagManager:
   - Enemy
   - Rocket2
   - InitialCamera
+  - woodBox
   layers:
   - Default
   - TransparentFX

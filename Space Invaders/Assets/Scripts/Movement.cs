@@ -17,6 +17,7 @@ public class Movement : NetworkBehaviour
     public RawImage masterRocket1Prefab;
     public RawImage masterRocket2Prefab;
     public RawImage masterRocket3Prefab;
+    public RawImage masterRocketExtraPrefab;
     public Text welcomePrefab;
     public Text welcomeMessagePrefab;
 
@@ -24,6 +25,7 @@ public class Movement : NetworkBehaviour
     private GameObject _masterRocket1;
     private GameObject _masterRocket2;
     private GameObject _masterRocket3;
+    private GameObject _masterRocketExtra;
     private GameObject _welcome;
     private GameObject _welcomeMessage;
     private bool showWelcomeMessage;
@@ -37,11 +39,36 @@ public class Movement : NetworkBehaviour
     private float shotElapsedTime;
     private bool canShootRocket2;
     private int masterRocketsCount;
-    
+    private GameController gameController;
 
     public override void OnStartAuthority()
     {
         Start();
+    }
+    void loadUI()
+    {
+        GameObject canvasObject = Instantiate(canvas).gameObject;
+        RectTransform rTransform = canvasObject.GetComponent<RectTransform>();
+        _Astro = Instantiate(AstroPrefab.gameObject);
+        _Astro.transform.SetParent(rTransform, false);
+
+        _masterRocket1 = Instantiate(masterRocket1Prefab.gameObject);
+        _masterRocket1.transform.SetParent(rTransform, false);
+
+        _masterRocket2 = Instantiate(masterRocket2Prefab.gameObject);
+        _masterRocket2.transform.SetParent(rTransform, false);
+
+        _masterRocket3 = Instantiate(masterRocket3Prefab.gameObject);
+        _masterRocket3.transform.SetParent(rTransform, false);
+
+        _masterRocketExtra = Instantiate(masterRocketExtraPrefab.gameObject);
+        _masterRocketExtra.transform.SetParent(rTransform, false);
+
+        _welcome = Instantiate(welcomePrefab.gameObject);
+        _welcome.transform.SetParent(rTransform, false);
+
+        _welcomeMessage = Instantiate(welcomeMessagePrefab.gameObject);
+        _welcomeMessage.transform.SetParent(rTransform, false);
     }
 
     private void Start()
@@ -55,6 +82,11 @@ public class Movement : NetworkBehaviour
         _welcome.GetComponent<Text>().text = "Welcome to BE in space";
         _welcomeMessage.GetComponent<Text>().text = "Hello and welcome to BE in space\n your task is to kill and get some score bitch \n right click for master rocket\n HIT ENTER TO BEGIN";
         showWelcomeMessage = true;
+        GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
+        if (gameConrollerObject != null)
+        {
+            gameController = gameConrollerObject.GetComponent<GameController>();
+        }
     }
 
     private void Update()
@@ -166,6 +198,19 @@ public class Movement : NetworkBehaviour
             audioData = GetComponent<AudioSource>();
             audioData.Play(0);
         }
+        if (gameController.getExtraRocketStatus())
+            {
+                _masterRocketExtra.GetComponent<RawImage>().enabled = true;
+                if (Input.GetButton("Fire2") && Time.time > nextFire)
+                {
+                    nextFire = Time.time + fireRate;
+                CmdSpawnMasterRocket(rocket2Shot.position, rocket2Shot.rotation);
+                    audioData = GetComponent<AudioSource>();
+                    audioData.Play(0);
+                    _masterRocketExtra.GetComponent<RawImage>().enabled = false;
+                    gameController.setExtraRocket(false);
+                }
+            }
         if (shotElapsedTime < 7 && canShootRocket2 && masterRocketsCount != 0)
         {
             if (Input.GetButton("Fire2") && Time.time > nextFire)
@@ -278,34 +323,12 @@ public class Movement : NetworkBehaviour
     {
         rocket2Text.color = new Color(1, 0, 0);
         rocket2Text.text = "";
-        masterRocket1Prefab.enabled = true;
-        masterRocket2Prefab.enabled = true;
-        masterRocket3Prefab.enabled = true;
+        _masterRocket1.GetComponent<RawImage>().enabled = true;
+        _masterRocket2.GetComponent<RawImage>().enabled = true;
+        _masterRocket3.GetComponent<RawImage>().enabled = true;
+        _masterRocketExtra.GetComponent<RawImage>().enabled = false;
         masterRocketsCount = 3;
         canShootRocket2 = true;
-    }
-
-    private void loadUI()
-    {
-        GameObject canvasObject = Instantiate(canvas).gameObject;
-        RectTransform rTransform = canvasObject.GetComponent<RectTransform>();
-        _Astro = Instantiate(AstroPrefab.gameObject);
-        _Astro.transform.SetParent(rTransform, false);
-
-        _masterRocket1 = Instantiate(masterRocket1Prefab.gameObject);
-        _masterRocket1.transform.SetParent(rTransform, false);
-
-        _masterRocket2 = Instantiate(masterRocket2Prefab.gameObject);
-        _masterRocket2.transform.SetParent(rTransform, false);
-
-        _masterRocket3 = Instantiate(masterRocket3Prefab.gameObject);
-        _masterRocket3.transform.SetParent(rTransform, false);
-
-        _welcome = Instantiate(welcomePrefab.gameObject);
-        _welcome.transform.SetParent(rTransform, false);
-
-        _welcomeMessage = Instantiate(welcomeMessagePrefab.gameObject);
-        _welcomeMessage.transform.SetParent(rTransform, false);
     }
 
     private void WelcomeMessage()
