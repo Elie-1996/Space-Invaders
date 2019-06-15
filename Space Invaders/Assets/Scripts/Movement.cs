@@ -34,7 +34,7 @@ public class Movement : NetworkBehaviour
     public Transform rocket2Shot;
     public float fireRate;
     private float nextFire;
-    private float elapsedTime;
+    private float shotElapsedTime;
     private bool canShootRocket2;
     private int masterRocketsCount;
     
@@ -48,16 +48,9 @@ public class Movement : NetworkBehaviour
     {
         if (hasAuthority == false) return;
         loadUI();
-        elapsedTime = 0.0f;
-        camSwitchTime = Time.time;
-        SetActiveCameras();
-        rocket2Text.color = new Color(1, 0, 0);
-        rocket2Text.text = "";
-        masterRocket1Prefab.enabled = true;
-        masterRocket2Prefab.enabled = true;
-        masterRocket3Prefab.enabled = true;
-        masterRocketsCount = 3;
-        canShootRocket2 = true;
+        shotElapsedTime = 0.0f;
+        InitCameras();
+        InitRockets();
         _Astro.GetComponent<RawImage>().enabled = true;
         _welcome.GetComponent<Text>().text = "Welcome to BE in space";
         _welcomeMessage.GetComponent<Text>().text = "Hello and welcome to BE in space\n your task is to kill and get some score bitch \n right click for master rocket\n HIT ENTER TO BEGIN";
@@ -151,6 +144,7 @@ public class Movement : NetworkBehaviour
     [ClientRpc]
     private void RpcHandleRotation(Quaternion newRotation)
     {
+        if (hasAuthority == true) return;
         HandleRotationHelper(newRotation);
     }
 
@@ -164,29 +158,29 @@ public class Movement : NetworkBehaviour
     private void HandleShooting()
     {
         AudioSource audioData;
-        elapsedTime += Time.deltaTime;
+        shotElapsedTime += Time.deltaTime;
         if (Input.GetButton("Fire1") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-            CmdSpawnShot(rocket1, rocket1Shot.position, rocket1Shot.rotation);
+            CmdSpawnNormalRocket(rocket1Shot.position, rocket1Shot.rotation);
             audioData = GetComponent<AudioSource>();
             audioData.Play(0);
         }
-        if (elapsedTime < 7 && canShootRocket2 && masterRocketsCount != 0)
+        if (shotElapsedTime < 7 && canShootRocket2 && masterRocketsCount != 0)
         {
             if (Input.GetButton("Fire2") && Time.time > nextFire)
             {
                 nextFire = Time.time + fireRate;
-                CmdSpawnShot(rocket2, rocket2Shot.position, rocket2Shot.rotation);
+                CmdSpawnMasterRocket(rocket2Shot.position, rocket2Shot.rotation);
                 audioData = GetComponent<AudioSource>();
                 audioData.Play(0);
                 turnOffRocketsImage();
                 masterRocketsCount--;
             }
         }
-        else if (elapsedTime > 10 && !canShootRocket2)
+        else if (shotElapsedTime > 10 && !canShootRocket2)
         {
-            elapsedTime = 0.0f;
+            shotElapsedTime = 0.0f;
             rocket2Text.color = new Color(1, 0, 0);
             rocket2Text.text = "";
             _masterRocket1.GetComponent<RawImage>().enabled = true;
@@ -197,7 +191,7 @@ public class Movement : NetworkBehaviour
         }
         else
         {
-            if (canShootRocket2) { elapsedTime = 0.0f; }
+            if (canShootRocket2) { shotElapsedTime = 0.0f; }
             rocket2Text.color = new Color(0.67f, 0.67f, 0.19f);
             rocket2Text.text = "";
             if (_masterRocket1 == null) { Debug.Log("_masterRocket1 is null"); }
@@ -210,10 +204,23 @@ public class Movement : NetworkBehaviour
     }
 
     [Command]
-    private void CmdSpawnShot(GameObject shotObject, Vector3 startingPostion, Quaternion startingRotation)
+    private void CmdSpawnNormalRocket(Vector3 startingPostion, Quaternion startingRotation)
     {
-        GameObject shot = Instantiate(shotObject, startingPostion, startingRotation);
-        NetworkServer.Spawn(shot);
+        GameObject normalRocket = Instantiate(rocket1, startingPostion, startingRotation);
+        NetworkServer.Spawn(normalRocket);
+    }
+
+    [Command]
+    private void CmdSpawnMasterRocket(Vector3 startingPosition, Quaternion startingRotation)
+    {
+        GameObject masterRocket = Instantiate(rocket2, startingPosition, startingRotation);
+        NetworkServer.Spawn(masterRocket);
+    }
+
+    private void InitCameras()
+    {
+        camSwitchTime = Time.time;
+        SetActiveCameras();
     }
 
     private void SetActiveCameras()
@@ -221,13 +228,24 @@ public class Movement : NetworkBehaviour
         if (cameras == null) { Debug.LogError(typeof(Movement).Name + ": Start() Function was initiated with null"); return; }
         foreach (Transform child in cameras.transform)
         {
-            child.gameObject.SetActive(false);
-
             if (child.gameObject.tag == PlayerGameObject.Tags.cameras.GetValue())
             {
-                child.gameObject.SetActive(true);
+                SetCameraStatus(child.gameObject, true);
+            }
+            else
+            {
+                SetCameraStatus(child.gameObject, false);
             }
         }
+    }
+
+    private void SetCameraStatus(GameObject cameraHolder, bool isEnabled)
+    {
+        Camera c = cameraHolder.GetComponent<Camera>();
+        if (c == null) throw new MissingComponentException("No camera component was found!");
+        c.enabled = true;
+
+        cameraHolder.SetActive(isEnabled);
     }
 
     private void HandleSwitchingActiveCamera()
@@ -254,6 +272,17 @@ public class Movement : NetworkBehaviour
         }
         else
             _masterRocket1.GetComponent<RawImage>().enabled = false;
+    }
+
+    private void InitRockets()
+    {
+        rocket2Text.color = new Color(1, 0, 0);
+        rocket2Text.text = "";
+        masterRocket1Prefab.enabled = true;
+        masterRocket2Prefab.enabled = true;
+        masterRocket3Prefab.enabled = true;
+        masterRocketsCount = 3;
+        canShootRocket2 = true;
     }
 
     private void loadUI()
