@@ -40,6 +40,7 @@ public class Movement : NetworkBehaviour
     private bool canShootRocket2;
     private int masterRocketsCount;
     private GameController gameController;
+    private bool shouldStart = true;
 
     public override void OnStartAuthority()
     {
@@ -74,13 +75,15 @@ public class Movement : NetworkBehaviour
     private void Start()
     {
         if (hasAuthority == false) return;
+        if (shouldStart == false) return;
+        shouldStart = false;
         loadUI();
         shotElapsedTime = 0.0f;
         InitCameras();
         InitRockets();
         _Astro.GetComponent<RawImage>().enabled = true;
         _welcome.GetComponent<Text>().text = "Welcome to BE in space";
-        _welcomeMessage.GetComponent<Text>().text = "Hello and welcome to BE in space\n your task is to kill and get some score bitch \n right click for master rocket\n HIT ENTER TO BEGIN";
+        _welcomeMessage.GetComponent<Text>().text = "Hello and welcome to BE in space\n your task is to kill and get some score \n right click for master rocket\n HIT ENTER TO BEGIN";
         showWelcomeMessage = true;
         GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
         if (gameConrollerObject != null)
