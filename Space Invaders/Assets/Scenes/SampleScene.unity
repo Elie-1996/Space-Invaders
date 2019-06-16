@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.40303728, g: 0.42368498, b: 0.42514232, a: 1}
+  m_IndirectSpecularColor: {r: 0.40303722, g: 0.4236848, b: 0.42514268, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -665,7 +665,8 @@ MonoBehaviour:
   - {fileID: 6582851722274891640, guid: 28b45ac9308743c4389701032e3bb50a, type: 3}
   - {fileID: 4846516266908086113, guid: 6f6f55d1c7bcdb4439ae93a83fca02c2, type: 3}
   - {fileID: 5321511392138099100, guid: 97505c2cc67c81c4bbb9fe45d6ad2c61, type: 3}
-  m_CustomConfig: 0
+  - {fileID: 1823410045902441163, guid: f2cbdb91f70b2d540ba4ac9dede19b37, type: 3}
+  m_CustomConfig: 1
   m_MaxConnections: 4
   m_ConnectionConfig:
     m_PacketSize: 1440
@@ -707,7 +708,7 @@ MonoBehaviour:
     m_MaxTimerTimeout: 12000
     m_MinNetSimulatorTimeout: 1
     m_MaxNetSimulatorTimeout: 12000
-  m_Channels: 
+  m_Channels: 0500000000000000
   m_UseWebSockets: 0
   m_UseSimulator: 0
   m_SimulatedLatency: 1
@@ -1148,6 +1149,7 @@ GameObject:
   - component: {fileID: 1655137213}
   - component: {fileID: 1655137215}
   - component: {fileID: 1655137216}
+  - component: {fileID: 1655137217}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -1302,6 +1304,39 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1655137217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1655137212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!1 &2067394709
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-public class GameController : MonoBehaviour
+public class GameController : NetworkBehaviour
 {
     public GameObject gameBackground;
     public GameObject Planets;
@@ -67,10 +68,16 @@ public class GameController : MonoBehaviour
         shouldAdvanceLevel = false;
         InitiatePlanetLocations();
         StartCoroutine (LevelSystem());
-        //StartCoroutine(SpawnAsteroids());
+        CmdCreateAsteroids();
         escape = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+    }
+
+    [Command]
+    private void CmdCreateAsteroids()
+    {
+        StartCoroutine(SpawnAsteroids());
     }
 
     IEnumerator LevelSystem()
@@ -165,6 +172,7 @@ public class GameController : MonoBehaviour
             }
         }
     }
+
     IEnumerator SpawnAsteroids()
     {
         float radius = Utils.getBackgroundRadius(gameBackground);
@@ -178,32 +186,39 @@ public class GameController : MonoBehaviour
         {
             Vector3 inc = new Vector3(direction.x * i, direction.y * i, direction.z * i);
             if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawn + inc, Quaternion.identity);
+                CmdInstantiateAsteroid(startSpawn + inc, Quaternion.identity);
 
-            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroid(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroid(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroid(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
 
             if (Random.value <= 0.3)
-                Instantiate(AsteroidPrefab, startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+                CmdInstantiateAsteroid(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
         }
 
         // spawn endless Asteroids from startSpawn
         while (true)
         {
             if (Random.value <= 0.5)
-                Instantiate(AsteroidPrefab, startSpawn, Quaternion.identity);
+                CmdInstantiateAsteroid(startSpawn, Quaternion.identity);
 
-            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
 
             if (Random.value <= 0.3)
-                Instantiate(AsteroidPrefab, startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+                CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
             yield return new WaitForSeconds(asteroidSpawnWaitSeconds);
         }
+    }
+
+    [Command]
+    private void CmdInstantiateAsteroid(Vector3 startingPosition, Quaternion startingRotation)
+    {
+        GameObject asteroid = Instantiate(AsteroidPrefab, startingPosition, startingRotation);
+        NetworkServer.Spawn(asteroid);
     }
 
     void updateScore()
