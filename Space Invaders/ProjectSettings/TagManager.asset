@@ -12,6 +12,10 @@ TagManager:
   - Rocket2
   - InitialCamera
   - woodBox
+  - pointLight
+  - spotLight2
+  - spotLight1
+  - ThirdCam
   layers:
   - Default
   - TransparentFX

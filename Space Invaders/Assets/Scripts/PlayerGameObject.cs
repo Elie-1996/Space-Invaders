@@ -11,7 +11,8 @@ public class PlayerGameObject : MonoBehaviour
         // in the unity editor
         public const string InitialCamera = "InitialCamera";
         public const string SecondaryCamera = "SecondaryCamera";
+        public const string thirdCamera = "Finish";
 
-        public static ImmutableDoublyLinkedList<string> cameras = new ImmutableDoublyLinkedList<string>(0, InitialCamera, SecondaryCamera);
+        public static ImmutableDoublyLinkedList<string> cameras = new ImmutableDoublyLinkedList<string>(0, InitialCamera, SecondaryCamera,thirdCamera);
     }
 }
