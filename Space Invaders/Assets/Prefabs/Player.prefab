@@ -4764,12 +4764,12 @@ GameObject:
   - component: {fileID: 733456161460756399}
   - component: {fileID: 9066177448928383456}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: Third Camera
   m_TagString: ThirdCam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4887140719405861064
 Transform:
   m_ObjectHideFlags: 0
