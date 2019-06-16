@@ -69,7 +69,6 @@ public class GameController : NetworkBehaviour
         InitiatePlanetLocations();
         StartCoroutine (LevelSystem());
         CmdCreateAsteroids();
-        //StartCoroutine(SpawnAsteroids());
         escape = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
