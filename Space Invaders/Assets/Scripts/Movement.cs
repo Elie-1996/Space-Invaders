@@ -139,6 +139,13 @@ public class Movement : NetworkBehaviour
             _moveSpeed = moveSpeed;
         }
         Vector3 moveAmount = _moveSpeed * (verticalDirection * rigidbody.transform.forward + horizontalDirection * rigidbody.transform.right);
+        ParticleSystem particleSystem = gameObject.GetComponentInChildren<ParticleSystem>();
+        if (moveAmount == new Vector3(0, 0, 0))
+        {
+            particleSystem.enableEmission = false;
+        }
+        else
+            particleSystem.enableEmission = true;
         rigidbody.velocity = moveAmount;
 
         // ask the server to handle this unit's movement as well.
