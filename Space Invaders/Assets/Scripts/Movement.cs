@@ -41,7 +41,7 @@ public class Movement : NetworkBehaviour
     private int masterRocketsCount;
     private GameController gameController;
     private bool shouldStart = true;
-
+    private float extraSpeeedTime;
     public override void OnStartAuthority()
     {
         Start();
@@ -124,10 +124,21 @@ public class Movement : NetworkBehaviour
 
     private void HandleMovement(Rigidbody rigidbody)
     {
+        float _moveSpeed = 0;
         float verticalDirection = Input.GetAxis("Vertical");
         float horizontalDirection = Input.GetAxis("Horizontal");
-
-        Vector3 moveAmount = moveSpeed * (verticalDirection * rigidbody.transform.forward + horizontalDirection * rigidbody.transform.right);
+        if (gameController.getSpeedGift())
+        {
+            extraSpeeedTime += Time.time;
+            _moveSpeed = moveSpeed + 45f;
+            if(extraSpeeedTime > 10 * 1000) { gameController.setSpeedGift(false); }
+        }
+        else
+        {
+            extraSpeeedTime = 0f;
+            _moveSpeed = moveSpeed;
+        }
+        Vector3 moveAmount = _moveSpeed * (verticalDirection * rigidbody.transform.forward + horizontalDirection * rigidbody.transform.right);
         rigidbody.velocity = moveAmount;
 
         // ask the server to handle this unit's movement as well.

@@ -7,10 +7,11 @@ public class RocketAndScoreGift : MonoBehaviour
 {
     public GameObject explosion;
 
-    private Stopwatch sw;
+    private float sw;
     private GameController gameController;
     private AudioSource audioData;
     private bool shouldDestry;
+    private int giftType;// 1 for extra master rocket, 2 for additional 25 score, 3 for 10 seconds 
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +22,7 @@ public class RocketAndScoreGift : MonoBehaviour
         }
         audioData = GetComponent<AudioSource>();
         shouldDestry = false;
-        sw = Stopwatch.StartNew();
+        sw = 0;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -29,8 +30,18 @@ public class RocketAndScoreGift : MonoBehaviour
         if (other.tag == Utils.TagPlayer)
         {
             audioData.Play();
-            //Destroy(gameObject);
-            gameController.setExtraRocket(true);
+            if (giftType == 1)  // extra master rocket
+            {
+                gameController.setExtraRocket(true);
+            }
+            else if (giftType == 2) //extra score
+            {
+                gameController.addScore(25);
+            }
+            else
+            {
+                gameController.setSpeedGift(true);
+            }
         }
     }
     private void OnTriggerExit(Collider other)
@@ -43,12 +54,17 @@ public class RocketAndScoreGift : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        sw += Time.time;
         if (shouldDestry) { Destroy(gameObject); }
-        if (sw.ElapsedMilliseconds > 8 * 1000)
+        if (sw > 8*1000)
         {
             Instantiate(explosion, transform.position,transform.rotation);
             Destroy(explosion);
             Destroy(gameObject);
         }
+    }
+    void onStart(int gift)
+    {
+        giftType = gift;
     }
 }

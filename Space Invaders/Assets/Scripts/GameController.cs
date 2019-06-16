@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour
     private bool escape;
 
     private bool extraRocket;
+    private bool speedGift;
     void loadGUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -234,5 +235,6 @@ public class GameController : MonoBehaviour
     }
     public void setExtraRocket(bool status) { extraRocket = status; }
     public bool getExtraRocketStatus() { return extraRocket; }
-
+    public bool getSpeedGift() { return speedGift; }
+    public void setSpeedGift(bool status) { speedGift = status; }
 }
