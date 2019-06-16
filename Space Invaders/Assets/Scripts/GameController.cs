@@ -66,7 +66,7 @@ public class GameController : NetworkBehaviour
         maxAllowedLevels = Planets.transform.childCount;
         level = 1;
         shouldAdvanceLevel = false;
-        InitiatePlanetLocations();
+        CmdInitiatePlanetLocations();
         StartCoroutine (LevelSystem());
         CmdCreateAsteroids();
         escape = true;
@@ -130,7 +130,8 @@ public class GameController : NetworkBehaviour
         }
     }
 
-    void InitiatePlanetLocations()
+    [Command]
+    void CmdInitiatePlanetLocations()
     {
         float radius = Utils.getGameBoundaryRadius(gameBackground) + 25.0f;
         foreach (Transform child in Planets.transform)
