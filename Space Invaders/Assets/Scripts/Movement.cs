@@ -42,6 +42,12 @@ public class Movement : NetworkBehaviour
     private GameController gameController;
     private bool shouldStart = true;
     private float extraSpeeedTime;
+    private float radious;
+    private int waitTwoFrames;
+    private Image image;
+    private AudioSource dangerAudioSource;
+    private Text dangerText;
+    private bool shouldPlayDanger;
     public override void OnStartAuthority()
     {
         Start();
@@ -90,6 +96,15 @@ public class Movement : NetworkBehaviour
         {
             gameController = gameConrollerObject.GetComponent<GameController>();
         }
+        waitTwoFrames = 0;
+        radious = Utils.getGameBoundaryRadius(GameObject.FindGameObjectWithTag(Utils.TagBackground));
+        image = gameObject.GetComponentInChildren<Image>();
+        dangerText = gameObject.GetComponentInChildren<Text>();
+        dangerText.text = "";
+        Color tmpColor = image.color;
+        tmpColor.a = 0f;
+        image.color = tmpColor;
+        shouldPlayDanger = false;
     }
 
     private void Update()
@@ -103,6 +118,7 @@ public class Movement : NetworkBehaviour
         {
             HandleSwitchingActiveCamera();
             HandleShooting();
+            HandleDistanceFromBoundary();
         }
     }
 
@@ -360,6 +376,46 @@ public class Movement : NetworkBehaviour
             _welcome.GetComponent<Text>().text = "";
             _welcomeMessage.GetComponent<Text>().text = "";
             showWelcomeMessage = false;
+        }
+    }
+    private void HandleDistanceFromBoundary()
+    {
+        dangerAudioSource = GetComponents<AudioSource>()[1];
+        float distance = Vector3.Distance(new Vector3(0, 0, 0), gameObject.transform.position);
+        distance = radious - distance;
+        if (distance > 0 && distance < 100f) // should alert
+        {
+            if (!shouldPlayDanger)
+            {
+                dangerAudioSource.Play();
+                shouldPlayDanger = true;
+            }
+            dangerText.text = "You're too close to the edge! STAY AWAY";
+            dangerAudioSource.enabled = true;
+            if (waitTwoFrames == 0)
+            {
+                Color tmpColor = image.color;
+                tmpColor.a = 0.5f;
+                image.color = tmpColor;
+            }
+            waitTwoFrames++;
+            if (waitTwoFrames == 3)
+            {
+                Color tmpColor = image.color;
+                tmpColor.a = 0f;
+                image.color = tmpColor;
+                waitTwoFrames = 0;
+            }
+        }
+        else if (distance <= 0) { dangerText.text = ""; Destroy(gameObject); gameController.GameOverFunction(); }
+        else
+        {
+            dangerText.text = "";
+            Color tmpColor = image.color;
+            tmpColor.a = 0f;
+            image.color = tmpColor;
+            dangerAudioSource.Stop();
+            shouldPlayDanger = false;
         }
     }
 }

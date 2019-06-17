@@ -16,6 +16,7 @@ TagManager:
   - spotLight2
   - spotLight1
   - ThirdCam
+  - redScreen
   layers:
   - Default
   - TransparentFX
