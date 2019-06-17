@@ -64,7 +64,7 @@ public class Rocket2Movment : NetworkBehaviour
                     if (collider.tag == Utils.TagBackground || collider.tag == Utils.TagGameConroller || collider.tag == Utils.TagPlayer) { continue; }
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
-                    Destroy(collider.gameObject);
+                    Utils.CmdDestroyObjectByID(collider.gameObject.GetComponent<NetworkIdentity>());
                 }
                 Instantiate(rocke2Explosion, transform.position, transform.rotation);
                 gameController.addScore(score);

@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine;
 
-public class DestroyEnemy : MonoBehaviour
+public class DestroyEnemy : NetworkBehaviour
 {
     public GameObject explosion;
     public GameObject rocke2Explosion;
@@ -37,7 +38,7 @@ public class DestroyEnemy : MonoBehaviour
                     if (collider.tag == Utils.TagBackground || collider.tag == Utils.TagGameConroller || collider.tag == Utils.TagPlayer) {continue;}
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
-                    Destroy(collider.gameObject);
+                    Utils.CmdDestroyObjectByID(collider.gameObject.GetComponent<NetworkIdentity>());
                 }
                 Instantiate(rocke2Explosion, other.transform.position, other.transform.rotation);
                 gameController.addScore(score);
@@ -51,8 +52,8 @@ public class DestroyEnemy : MonoBehaviour
         GameObject gift =  Instantiate(woodBox, transform.position, transform.rotation);
         HandleGiftColoring(randomGift);
         gift.SendMessage("onStart", randomGift);
-        Destroy(other.gameObject);
-        Destroy(gameObject);
+        Utils.CmdDestroyObjectByID(other.gameObject.GetComponent<NetworkIdentity>());
+        Utils.CmdDestroyObjectByID(gameObject.GetComponent<NetworkIdentity>());
     }
 
     private void HandleGiftColoring(int giftType)

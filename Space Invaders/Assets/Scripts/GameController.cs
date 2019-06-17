@@ -34,6 +34,9 @@ public class GameController : NetworkBehaviour
 
     private bool extraRocket;
     private bool speedGift;
+
+    private GameObject AsteroidsHolder;
+
     void loadGUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -62,7 +65,7 @@ public class GameController : NetworkBehaviour
         restart = false;
         _gameOverText.GetComponent<Text>().text = "";
         _RestartText.GetComponent<Text>().text = "";
-
+        AsteroidsHolder = new GameObject("Asteroid Holder");
         maxAllowedLevels = Planets.transform.childCount;
         level = 1;
         shouldAdvanceLevel = false;
@@ -211,6 +214,7 @@ public class GameController : NetworkBehaviour
             if (Random.value <= 0.3)
                 CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
+            AsteroidsHolder.name = "Asteroid Holder (" + AsteroidsHolder.transform.childCount + ")"; 
             yield return new WaitForSeconds(asteroidSpawnWaitSeconds);
         }
     }
@@ -219,6 +223,7 @@ public class GameController : NetworkBehaviour
     private void CmdInstantiateAsteroid(Vector3 startingPosition, Quaternion startingRotation)
     {
         GameObject asteroid = Instantiate(AsteroidPrefab, startingPosition, startingRotation);
+        asteroid.transform.parent = AsteroidsHolder.transform;
         NetworkServer.Spawn(asteroid);
     }
 

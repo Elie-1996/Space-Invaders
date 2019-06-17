@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine;
 
-public class DestroyAsteroid : MonoBehaviour
+public class DestroyAsteroid : NetworkBehaviour
 {
     public GameObject explosion;
     public GameObject rocke2Explosion;
@@ -35,7 +36,7 @@ public class DestroyAsteroid : MonoBehaviour
                     if (collider.tag == Utils.TagBackground || collider.tag == Utils.TagGameConroller || collider.tag == Utils.TagPlayer) { continue; }
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
-                    Destroy(collider.gameObject);
+                    Utils.CmdDestroyObjectByID(collider.gameObject.GetComponent<NetworkIdentity>());
                 }
                 Instantiate(rocke2Explosion, other.transform.position, other.transform.rotation);
                 gameController.addScore(score);
@@ -45,7 +46,8 @@ public class DestroyAsteroid : MonoBehaviour
         score = Utils.AsteroidScore;
         gameController.addScore(score);
         Instantiate(explosion, other.transform.position, other.transform.rotation);
-        Destroy(other.gameObject);
-        Destroy(gameObject);
+        Utils.CmdDestroyObjectByID(other.gameObject.GetComponent<NetworkIdentity>());
+        Utils.CmdDestroyObjectByID(gameObject.GetComponent<NetworkIdentity>());
     }
+
 }

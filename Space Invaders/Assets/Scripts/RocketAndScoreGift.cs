@@ -54,12 +54,11 @@ public class RocketAndScoreGift : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        sw += Time.time;
+        sw += Time.deltaTime;
         if (shouldDestry) { Destroy(gameObject); }
-        if (sw > 8*1000)
+        if (sw > 8)
         {
             Instantiate(explosion, transform.position,transform.rotation);
-            Destroy(explosion);
             Destroy(gameObject);
         }
     }

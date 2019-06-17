@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine;
 
-public class Boundary : MonoBehaviour
+public class Boundary : NetworkBehaviour
 {
     public GameObject player;
 
@@ -47,7 +48,7 @@ public class Boundary : MonoBehaviour
         }
         else
         {
-            Destroy(other.gameObject);
+            Utils.CmdDestroyObjectByID(other.GetComponent<NetworkIdentity>());
         }
     }
 }

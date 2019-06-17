@@ -12,10 +12,10 @@ public class Utils
     public const string TagEnemy = "Enemy";
     public const string TagRocket2 = "Rocket2";
     public const string TagGameConroller = "GameController";
-    public const string TagWoodBox= "woodBox";
-    public const string TagSpotLight1= "spotLight1";
-    public const string TagSpotLight2= "spotLight2";
-    public const string TagPontLight= "pointLight";
+    public const string TagWoodBox = "woodBox";
+    public const string TagSpotLight1 = "spotLight1";
+    public const string TagSpotLight2 = "spotLight2";
+    public const string TagPontLight = "pointLight";
     public const int AsteroidScore = 1;
     public const int EnemyScore = 10;
     private static Vector3 asteroidDirection;
@@ -34,7 +34,7 @@ public class Utils
     // returns the game's radius, though gameBackground should be the Circular_Background
     public static float getGameBoundaryRadius(GameObject gameBackground)
     {
-        if (gameBackground == null) { Debug.LogError("(" + typeof(Utils).Name + "): No game background component provided."); throw new MissingComponentException(); } 
+        if (gameBackground == null) { Debug.LogError("(" + typeof(Utils).Name + "): No game background component provided."); throw new MissingComponentException(); }
         SphereCollider bgSphere = gameBackground.GetComponent<SphereCollider>();
         if (bgSphere == null) { Debug.LogError("(" + typeof(Utils).Name + "): Missing SphereCollider for bg component."); throw new MissingComponentException(); }
 
@@ -52,11 +52,19 @@ public class Utils
         asteroidDirection = direction.normalized;
     }
     public static Vector3 getAsteroidDirection() => asteroidDirection;
-    public static Vector3 getRandomDirection()=> new Vector3(
+    public static Vector3 getRandomDirection() => new Vector3(
             (Random.value + 0.01f) * (Random.value < 0.5 ? 1 : -1),
             (Random.value + 0.01f) * (Random.value < 0.5 ? 1 : -1),
             (Random.value + 0.01f) * (Random.value < 0.5 ? 1 : -1)
         ).normalized;
+
+    [Command]
+    public static void CmdDestroyObjectByID(NetworkIdentity netIdentity)
+    {
+        if (netIdentity == null) throw new System.Exception("Server attempted to destroy a null network identity!");
+        GameObject obj = NetworkServer.FindLocalObject(netIdentity.netId);
+        NetworkServer.Destroy(obj);
+    }
 
     [System.Serializable]
     public class NonEqualScaleProvidedException : System.Exception
