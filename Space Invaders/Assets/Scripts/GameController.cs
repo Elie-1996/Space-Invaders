@@ -28,7 +28,7 @@ public class GameController : NetworkBehaviour
     private bool restart;
     private int score;
     private int maxAllowedLevels;
-    private bool shouldAdvanceLevel = false;
+    private bool shouldAdvanceLevel;
     private int level;
     private bool escape;
 
@@ -58,40 +58,87 @@ public class GameController : NetworkBehaviour
     void Start()
     {
         if (Planets == null || gameBackground == null || AsteroidPrefab == null || playerTransform == null) throw new MissingReferenceException();
+        // specific to the LOCAL PLAYER
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         loadGUI();
+
+        // specific to the LOCAL PLAYER (For Now)
         score = 0;
         updateScore();
         gameOver = false;
         restart = false;
+        escape = true;
         _gameOverText.GetComponent<Text>().text = "";
         _RestartText.GetComponent<Text>().text = "";
+        if (isServer == false)
+        {
+            AsteroidsHolder = new GameObject("Asteroid Holder");
+            CollectAsteroids();
+        }
+
+        // everything below is specific to the SERVER
+        if (isServer == false) return;
         AsteroidsHolder = new GameObject("Asteroid Holder");
+
+        // TODO: Asteroids should be handled on the server as well!
+
+        //CmdCreateAsteroids();
+        StartCoroutine(SpawnAsteroids());
+
+        // okay, let's initiate these planets locations as the SERVER
+        InitiatePlanetLocationsOnServerAndUpdateForClients();
         maxAllowedLevels = Planets.transform.childCount;
         level = 1;
         shouldAdvanceLevel = false;
-        CmdInitiatePlanetLocations();
         StartCoroutine (LevelSystem());
-        CmdCreateAsteroids();
-        escape = true;
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    [Command]
-    private void CmdCreateAsteroids()
+    private void CollectAsteroids()
     {
-        StartCoroutine(SpawnAsteroids());
+        GameObject[] spawnedAsteroids = GameObject.FindGameObjectsWithTag(Utils.TagAsteroid);
+        foreach (GameObject o in spawnedAsteroids)
+        {
+            o.transform.parent = AsteroidsHolder.transform;
+        }
+    }
+
+    private void InitiatePlanetLocationsOnServerAndUpdateForClients()
+    {
+        float radius = Utils.getGameBoundaryRadius(gameBackground) + 25.0f;
+        foreach (Transform child in Planets.transform)
+        {
+            GameObject planet = child.gameObject;
+            // generate random location
+            Vector3 direction = Utils.getRandomDirection();
+
+            // assign random location
+            planet.transform.position = direction * radius;
+            planet.SetActive(false);
+            // let's update ALL of the clients, to change their planet locations according to the SERVER.
+            RpcUpdatePlanetLocationsOnClient(planet.GetComponent<NetworkIdentity>(), planet.transform.position, planet.activeSelf);
+        }
+    }
+
+    [ClientRpc]
+    private void RpcUpdatePlanetLocationsOnClient(NetworkIdentity planetIdentity, Vector3 planetPosition, bool planetIsActive)
+    {
+        if (planetIdentity == null) throw new MissingComponentException("Fatal Error: No NetworkIdentity provided for the planet");
+        planetIdentity.gameObject.transform.position = planetPosition;
+        planetIdentity.gameObject.SetActive(planetIsActive);
+
     }
 
     IEnumerator LevelSystem()
     {
+        if (isServer == false) throw new Utils.AttemptedUnauthorizedAccessLevelSystemException("hasAuthority = " + hasAuthority + ", isLocalPlayer = " + isLocalPlayer + ", isServer = " + isServer + ".");
         while (level < maxAllowedLevels)
         {
             shouldAdvanceLevel = false;
             SpawnPlanets();
             StartCoroutine (SpawnLevel(level));
-            ++level;
             yield return new WaitUntil(()=> shouldAdvanceLevel == true);
+            ++level;
         }
         // Win Game! => Define Behaviour!
     }
@@ -125,27 +172,12 @@ public class GameController : NetworkBehaviour
     {
         int currentLevel = level;
         if (currentLevel <= 0 || currentLevel > maxAllowedLevels) return;
-        foreach (Transform child in Planets.transform)
+        foreach (Transform planet in Planets.transform)
         {
             if (currentLevel == 0) break;
-            child.gameObject.SetActive(true);
+            planet.gameObject.SetActive(true);
             currentLevel--;
-        }
-    }
-
-    [Command]
-    void CmdInitiatePlanetLocations()
-    {
-        float radius = Utils.getGameBoundaryRadius(gameBackground) + 25.0f;
-        foreach (Transform child in Planets.transform)
-        {
-            GameObject planet = child.gameObject;
-            // generate random location
-            Vector3 direction = Utils.getRandomDirection();
-
-            // assign random location
-            planet.transform.position = direction * radius;
-            planet.SetActive(false);
+            RpcUpdatePlanetLocationsOnClient(planet.gameObject.GetComponent<NetworkIdentity>(), planet.gameObject.transform.position, planet.gameObject.activeSelf);
         }
     }
 
@@ -190,42 +222,59 @@ public class GameController : NetworkBehaviour
         {
             Vector3 inc = new Vector3(direction.x * i, direction.y * i, direction.z * i);
             if (Random.value <= 0.5)
-                CmdInstantiateAsteroid(startSpawn + inc, Quaternion.identity);
+                InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc, Quaternion.identity);
 
-            CmdInstantiateAsteroid(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            CmdInstantiateAsteroid(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            CmdInstantiateAsteroid(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
 
             if (Random.value <= 0.3)
-                CmdInstantiateAsteroid(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+                InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
         }
 
         // spawn endless Asteroids from startSpawn
         while (true)
         {
             if (Random.value <= 0.5)
-                CmdInstantiateAsteroid(startSpawn, Quaternion.identity);
+                InstantiateAsteroidOnServerThenUpdateClient(startSpawn, Quaternion.identity);
 
-            CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
 
             if (Random.value <= 0.3)
-                CmdInstantiateAsteroid(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+                InstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
-            AsteroidsHolder.name = "Asteroid Holder (" + AsteroidsHolder.transform.childCount + ")"; 
+            RpcUpdateAsteroidHolder();
             yield return new WaitForSeconds(asteroidSpawnWaitSeconds);
         }
     }
 
-    [Command]
-    private void CmdInstantiateAsteroid(Vector3 startingPosition, Quaternion startingRotation)
+    [ClientRpc]
+    private void RpcUpdateAsteroidHolder()
     {
+        AsteroidsHolder.name = "Asteroid Holder (" + AsteroidsHolder.transform.childCount + ")";
+    }
+
+    private void InstantiateAsteroidOnServerThenUpdateClient(Vector3 startingPosition, Quaternion startingRotation)
+    {
+        if (isServer == false) throw new System.Exception("Unauthorized Access to instantiating Asteroids");
         GameObject asteroid = Instantiate(AsteroidPrefab, startingPosition, startingRotation);
         asteroid.transform.parent = AsteroidsHolder.transform;
         NetworkServer.Spawn(asteroid);
+        RpcInstantiateAsteroid(asteroid.GetComponent<NetworkIdentity>(), asteroid.transform.position, asteroid.transform.rotation);
     }
+
+    [ClientRpc]
+    private void RpcInstantiateAsteroid(NetworkIdentity asteroidIdentity, Vector3 startingPosition, Quaternion startingRotation)
+    {
+        if (asteroidIdentity == null) throw new MissingComponentException("Error: Asteroid did not have NetworkIdentity");
+        asteroidIdentity.gameObject.transform.parent = AsteroidsHolder.transform;
+        asteroidIdentity.gameObject.transform.position = startingPosition;
+        asteroidIdentity.gameObject.transform.rotation = startingRotation;
+    }
+
 
     void updateScore()
     {

@@ -48,10 +48,12 @@ public class Movement : NetworkBehaviour
     private AudioSource dangerAudioSource;
     private Text dangerText;
     private bool shouldPlayDanger;
+
     public override void OnStartAuthority()
     {
         Start();
     }
+
     void loadUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -86,7 +88,7 @@ public class Movement : NetworkBehaviour
         loadUI();
         shotElapsedTime = 0.0f;
         InitCameras();
-        InitRockets();
+        InitRocketsGUI();
         _Astro.GetComponent<RawImage>().enabled = true;
         _welcome.GetComponent<Text>().text = "Welcome to BE in space";
         _welcomeMessage.GetComponent<Text>().text = "Hello and welcome to BE in space\n your task is to kill and get some score \n right click for master rocket\n HIT ENTER TO BEGIN";
@@ -162,6 +164,8 @@ public class Movement : NetworkBehaviour
         }
         else
             particleSystem.enableEmission = true;
+
+        // handle movement locally
         rigidbody.velocity = moveAmount;
 
         // ask the server to handle this unit's movement as well.
@@ -198,8 +202,11 @@ public class Movement : NetworkBehaviour
 
         float xRotation = upRotationInput * rotationSpeed;
         float yRotation = roundRotationInput * rotationSpeed;
+
+        // Rotate body locally
         rigidbody.transform.Rotate(xRotation, yRotation, 0.0f);
         
+        // Update Rotation for everybody else
         CmdHandleRotation(rigidbody.transform.rotation);
     }
 
@@ -357,7 +364,7 @@ public class Movement : NetworkBehaviour
             _masterRocket1.GetComponent<RawImage>().enabled = false;
     }
 
-    private void InitRockets()
+    private void InitRocketsGUI()
     {
         rocket2Text.color = new Color(1, 0, 0);
         rocket2Text.text = "";

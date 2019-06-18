@@ -9,34 +9,31 @@ public class Rocket1Mover : NetworkBehaviour
     private Vector3 origin;
 
     private const float maxDistance = 20.0f;
+
     // Start is called before the first frame update
     void Start()
     {
+        origin = transform.position;
+        
+        if (isServer == false) return;
+
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         if (rigidbody == null)
         {
             Debug.LogError(gameObject.name + " (Rocket1Mover.cs): No Rigidbody component was found!");
             return;
         }
-        origin = transform.position;
 
-        CmdInitializeVelocity(transform.up);
-    }
+        // initialize the velocity locally
+        //rigidbody.velocity = transform.up * speed;
 
-    [Command]
-    private void CmdInitializeVelocity(Vector3 up)
-    {
-        InitializeVelocityHelper(up);
-        RpcInitializeVelocity(up);
+        // initialize the velocity for everyone else
+        //CmdInitializeVelocity(transform.up);
+        RpcInitializeVelocity(transform.up);
     }
 
     [ClientRpc]
     private void RpcInitializeVelocity(Vector3 up)
-    {
-        InitializeVelocityHelper(up);
-    }
-
-    private void InitializeVelocityHelper(Vector3 up)
     {
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         rigidbody.velocity = up * speed;
