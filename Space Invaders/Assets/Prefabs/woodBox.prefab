@@ -16889,7 +16889,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 256
   DopplerLevel: 1
   MinDistance: 254.03645
   MaxDistance: 509.71387
@@ -16981,8 +16981,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosion: {fileID: 1627199668855820729, guid: 96a8d1135a4697c44bd614e365fc3574,
     type: 3}
-  timeToDestroyObjects: 5
-  shouldAnimate: 1
 --- !u!65 &3641281329822320916
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16994,8 +16992,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 18.444992, y: 16.556, z: 17.342407}
-  m_Center: {x: 71.09138, y: -69.32782, z: 67.78564}
+  m_Size: {x: 15.707626, y: 16.296116, z: 15.989895}
+  m_Center: {x: 50.974014, y: -25.792715, z: 10.241537}
 --- !u!1 &6507429383351264073
 GameObject:
   m_ObjectHideFlags: 0
