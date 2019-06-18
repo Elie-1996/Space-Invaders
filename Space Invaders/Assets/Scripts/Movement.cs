@@ -19,6 +19,8 @@ public class Movement : NetworkBehaviour
     public RawImage masterRocket3Prefab;
     public RawImage masterRocketExtraPrefab;
     public Text welcomePrefab;
+    public Image redImage;
+    public Text redMessage;
     public Text welcomeMessagePrefab;
 
     private GameObject _Astro;
@@ -28,6 +30,8 @@ public class Movement : NetworkBehaviour
     private GameObject _masterRocketExtra;
     private GameObject _welcome;
     private GameObject _welcomeMessage;
+    private GameObject _redMessage;
+    private GameObject _redPicture;
     private bool showWelcomeMessage;
 
     public GameObject rocket1;
@@ -76,8 +80,27 @@ public class Movement : NetworkBehaviour
         _welcome = Instantiate(welcomePrefab.gameObject);
         _welcome.transform.SetParent(rTransform, false);
 
+        _redMessage = Instantiate(redMessage.gameObject);
+        _redMessage.transform.SetParent(rTransform, false);
+
+        _redPicture = Instantiate(redImage.gameObject);
+        _redPicture.transform.SetParent(rTransform, false);
+
         _welcomeMessage = Instantiate(welcomeMessagePrefab.gameObject);
         _welcomeMessage.transform.SetParent(rTransform, false);
+    }
+
+    private void InitializeRedAlertVariables()
+    {
+        waitTwoFrames = 0;
+        radious = Utils.getGameBoundaryRadius(GameObject.FindGameObjectWithTag(Utils.TagBackground));
+        image = _redPicture.GetComponent<Image>();
+        dangerText = _redMessage.GetComponent<Text>();
+        dangerText.text = "";
+        Color tmpColor = image.color;
+        tmpColor.a = 0f;
+        image.color = tmpColor;
+        shouldPlayDanger = false;
     }
 
     private void Start()
@@ -98,16 +121,9 @@ public class Movement : NetworkBehaviour
         {
             gameController = gameConrollerObject.GetComponent<GameController>();
         }
-        waitTwoFrames = 0;
-        radious = Utils.getGameBoundaryRadius(GameObject.FindGameObjectWithTag(Utils.TagBackground));
-        image = gameObject.GetComponentInChildren<Image>();
-        dangerText = gameObject.GetComponentInChildren<Text>();
-        dangerText.text = "";
-        Color tmpColor = image.color;
-        tmpColor.a = 0f;
-        image.color = tmpColor;
-        shouldPlayDanger = false;
+        InitializeRedAlertVariables();
     }
+
 
     private void Update()
     {
@@ -126,6 +142,7 @@ public class Movement : NetworkBehaviour
 
     private void FixedUpdate()
     {
+        if (hasAuthority == false) return;
         if (hasAuthority == false) return;
         if (showWelcomeMessage == true) return;
         Rigidbody rigidbody = GetComponent<Rigidbody>();
@@ -248,7 +265,7 @@ public class Movement : NetworkBehaviour
                 if (Input.GetButton("Fire2") && Time.time > nextFire)
                 {
                     nextFire = Time.time + fireRate;
-                CmdSpawnMasterRocket(rocket2Shot.position, rocket2Shot.rotation);
+                    CmdSpawnMasterRocket(rocket2Shot.position, rocket2Shot.rotation);
                     audioData = GetComponent<AudioSource>();
                     audioData.Play(0);
                     _masterRocketExtra.GetComponent<RawImage>().enabled = false;
@@ -333,7 +350,11 @@ public class Movement : NetworkBehaviour
     {
         Camera c = cameraHolder.GetComponent<Camera>();
         if (c == null) throw new MissingComponentException("No camera component was found!");
-        c.enabled = true;
+        c.enabled = isEnabled;
+
+        AudioListener listener = cameraHolder.GetComponent<AudioListener>();
+        if (listener == null) throw new MissingComponentException("No Audio Listener provided for Camera GameObject!");
+        listener.enabled = isEnabled;
 
         cameraHolder.SetActive(isEnabled);
     }
@@ -386,6 +407,7 @@ public class Movement : NetworkBehaviour
             showWelcomeMessage = false;
         }
     }
+
     private void HandleDistanceFromBoundary()
     {
         dangerAudioSource = GetComponents<AudioSource>()[1];
