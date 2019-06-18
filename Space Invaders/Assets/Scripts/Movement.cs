@@ -270,6 +270,7 @@ public class Movement : NetworkBehaviour
             _masterRocket3.GetComponent<RawImage>().enabled = true;
             masterRocketsCount = 3;
             canShootRocket2 = true;
+            GetComponents<AudioSource>()[2].Play();
         }
         else
         {
