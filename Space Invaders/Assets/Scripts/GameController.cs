@@ -25,7 +25,10 @@ public class GameController : NetworkBehaviour
     private GameObject circule;
     private bool gameOver;
     private bool restart;
+
+    [SyncVar(hook = "updateScoreGUI")]
     private int score;
+
     private int maxAllowedLevels;
     private bool shouldAdvanceLevel;
     private int level;
@@ -56,6 +59,7 @@ public class GameController : NetworkBehaviour
         _RestartText = Instantiate(RestartTextPrefab.gameObject);
         _RestartText.transform.SetParent(rTransform, false);
 
+        if (isServer) score = 0;
     }
 
 
@@ -69,8 +73,7 @@ public class GameController : NetworkBehaviour
         loadGUI();
 
         // specific to the LOCAL PLAYER (For Now)
-        score = 0;
-        updateScore();
+        updateScoreGUI(score);
         gameOver = false;
         restart = false;
         escape = true;
@@ -295,15 +298,25 @@ public class GameController : NetworkBehaviour
     }
 
 
-    void updateScore()
+    //please dont rename this function
+    void updateScoreGUI(int newScore)
     {
-        _scoreText.GetComponent<Text>().text = "Score: " + score;
+        score = newScore;
+        _scoreText.GetComponent<Text>().text = "Combined Score: " + score;
     }
 
     public void addScore (int newScore)
     {
+        if (!isServer)
+            CmdSetScore(newScore);
+        else
+            score += newScore;
+    }
+
+    [Command]
+    private void CmdSetScore(int newScore)
+    {
         score += newScore;
-        updateScore();
     }
 
     public void GameOverFunction(){
