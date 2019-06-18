@@ -13,37 +13,27 @@ public class Rocket2Movment : NetworkBehaviour
     private const float maxDistance = 20.0f;
     private void Start()
     {
+        origin = transform.position;
         GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
         if (gameConrollerObject != null)
         {
             gameController = gameConrollerObject.GetComponent<GameController>();
         }
+
+        if (isServer == false) return;
+
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         if (rigidbody == null)
         {
             Debug.LogError(gameObject.name + " (Rocket2Mover.cs): No Rigidbody component was found!");
             return;
         }
-        origin = transform.position;
 
-        CmdInitializeVelocity(transform.forward);
-    }
-
-
-    [Command]
-    private void CmdInitializeVelocity(Vector3 forward)
-    {
-        InitializeVelocityHelper(forward);
-        RpcInitializeVelocity(forward);
+        RpcInitializeVelocity(transform.forward);
     }
 
     [ClientRpc]
     private void RpcInitializeVelocity(Vector3 forward)
-    {
-        InitializeVelocityHelper(forward);
-    }
-
-    private void InitializeVelocityHelper(Vector3 forward)
     {
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         rigidbody.velocity = forward * speed;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -87,6 +88,15 @@ public class Utils
         if (x != y || x != z) throw new NonEqualScaleProvidedException("(class=" + typeof(Utils).Name + ", GameObject=" + _object.name + "): x = " + x + ", y = " + y + ", z = " + z);
         float scale = x;
         return scale;
+    }
+
+    [System.Serializable]
+    public class AttemptedUnauthorizedAccessLevelSystemException : System.Exception
+    {
+        public AttemptedUnauthorizedAccessLevelSystemException() {}
+        public AttemptedUnauthorizedAccessLevelSystemException(string message) : base(message) {}
+        public AttemptedUnauthorizedAccessLevelSystemException(string message, System.Exception innerException) : base(message, innerException) {}
+        protected AttemptedUnauthorizedAccessLevelSystemException(SerializationInfo info, StreamingContext context) : base(info, context) {}
     }
 }
 
