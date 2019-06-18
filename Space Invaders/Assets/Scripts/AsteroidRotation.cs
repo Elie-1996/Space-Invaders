@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine;
 
 public class AsteroidRotation : MonoBehaviour
@@ -14,7 +15,8 @@ public class AsteroidRotation : MonoBehaviour
     {
         sCollider = GetComponent<SphereCollider>();
         Rigidbody rigidbody = GetComponent<Rigidbody>();
-        Vector3 direction = Utils.getAsteroidDirection();
+        GameController gc = GameObject.FindWithTag(Utils.TagGameConroller).GetComponent<GameController>(); ;
+        Vector3 direction = gc.AsteroidDirection;
         rigidbody.velocity = direction * speed;
 
         offset = Utils.getRandomDirection() * Random.Range(1.0f, 30.0f);

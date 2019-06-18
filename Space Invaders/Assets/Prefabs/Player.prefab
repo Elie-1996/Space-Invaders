@@ -5829,13 +5829,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b54b0c7eed3fa44ac704fa708f60f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  moveSpeed: 50
   rotationSpeed: 10
   cameras: {fileID: 8528337156131692460}
   cameraSwitchRate: 0.5
   rocket2Text: {fileID: 566757152299495548, guid: 39499984d76df2840b735da12c9dd9a1,
-    type: 3}
-  redAlertCanvasPrefab: {fileID: 3098896334880075219, guid: b4bf08c3c1f9f5846ac9ed071a13c51c,
     type: 3}
   canvas: {fileID: 1638162266191859437, guid: f0f3c11d1ea7a9b45b3b89ec54510ed0, type: 3}
   AstroPrefab: {fileID: 4500173850422623248, guid: c743a5256d7f42c448f8f49adeac5661,
@@ -6029,7 +6027,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

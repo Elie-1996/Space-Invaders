@@ -301,8 +301,8 @@ public class Movement : NetworkBehaviour
             if (canShootRocket2) { shotElapsedTime = 0.0f; }
             rocket2Text.color = new Color(0.67f, 0.67f, 0.19f);
             rocket2Text.text = "";
-            if (_masterRocket1 == null) { Debug.Log("_masterRocket1 is null"); }
-            if (_masterRocket1.GetComponent<RawImage>() == null) { Debug.Log("_masterRocket1.RawImage is null"); }
+            if (_masterRocket1 == null) { Debug.LogError("_masterRocket1 is null"); }
+            if (_masterRocket1.GetComponent<RawImage>() == null) { Debug.LogError("_masterRocket1.RawImage is null"); }
             _masterRocket1.GetComponent<RawImage>().enabled = false;
             _masterRocket2.GetComponent<RawImage>().enabled = false;
             _masterRocket3.GetComponent<RawImage>().enabled = false;

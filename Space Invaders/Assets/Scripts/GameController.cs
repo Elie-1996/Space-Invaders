@@ -11,7 +11,6 @@ public class GameController : NetworkBehaviour
     public GameObject Planets;
     public GameObject AsteroidPrefab;
     public GameObject EnemyPrefab;
-    public Transform playerTransform;
     public float asteroidSpawnWaitSeconds;
     public float enemyIntervalSpawnWaitSeconds;
     public Canvas canvas;
@@ -37,6 +36,12 @@ public class GameController : NetworkBehaviour
 
     private GameObject AsteroidsHolder;
 
+    [SyncVar]
+    private Vector3 _AsteroidDirection;
+
+    public Vector3 AsteroidDirection { get { return _AsteroidDirection; } }
+    private Vector3 startSpawn;
+
     void loadGUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -57,7 +62,7 @@ public class GameController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (Planets == null || gameBackground == null || AsteroidPrefab == null || playerTransform == null) throw new MissingReferenceException();
+        if (Planets == null || gameBackground == null || AsteroidPrefab == null) throw new MissingReferenceException();
         // specific to the LOCAL PLAYER
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -81,10 +86,8 @@ public class GameController : NetworkBehaviour
         if (isServer == false) return;
         AsteroidsHolder = new GameObject("Asteroid Holder");
 
-        // TODO: Asteroids should be handled on the server as well!
+        SpawnAsteroids();
 
-        //CmdCreateAsteroids();
-        StartCoroutine(SpawnAsteroids());
 
         // okay, let's initiate these planets locations as the SERVER
         InitiatePlanetLocationsOnServerAndUpdateForClients();
@@ -94,6 +97,12 @@ public class GameController : NetworkBehaviour
         StartCoroutine (LevelSystem());
     }
 
+    private void SpawnAsteroids()
+    {
+        (_AsteroidDirection, startSpawn) = decideAsteroidDirection();
+        StartCoroutine(SpawnAsteroidsHelper());
+    }
+
     private void CollectAsteroids()
     {
         GameObject[] spawnedAsteroids = GameObject.FindGameObjectsWithTag(Utils.TagAsteroid);
@@ -101,6 +110,17 @@ public class GameController : NetworkBehaviour
         {
             o.transform.parent = AsteroidsHolder.transform;
         }
+    }
+
+    private (Vector3, Vector3) decideAsteroidDirection()
+    {
+        float radius = Utils.getBackgroundRadius(gameBackground);
+        Vector3 startSpawn = Utils.getRandomDirection() * radius;
+        while (startSpawn.x == 35.0f && startSpawn.y == 35.0f && startSpawn.z == 35.0f)
+            startSpawn = Utils.getRandomDirection() * radius;
+        return (
+            (new Vector3(35.0f, 35.0f, 35.0f) - startSpawn).normalized,
+             startSpawn);
     }
 
     private void InitiatePlanetLocationsOnServerAndUpdateForClients()
@@ -209,42 +229,40 @@ public class GameController : NetworkBehaviour
         }
     }
 
-    IEnumerator SpawnAsteroids()
+    IEnumerator SpawnAsteroidsHelper()
     {
-        float radius = Utils.getBackgroundRadius(gameBackground);
         float distance = 12.0f;
-        Vector3 startSpawn = Utils.getRandomDirection() * radius;
-        Vector3 direction = ((playerTransform.position + new Vector3(35.0f, 35.0f, 35.0f))- startSpawn).normalized;
-        Utils.setAsteroidDirection(direction);
-        
+        float radius = Utils.getBackgroundRadius(gameBackground);
+        Vector3 direction = _AsteroidDirection;
+
         // spawn the first 800
-        for (int i = 0; i < 750; i+=5)
+        for (int i = 0; i < 750; i += 5)
         {
             Vector3 inc = new Vector3(direction.x * i, direction.y * i, direction.z * i);
             if (Random.value <= 0.5)
-                InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc, Quaternion.identity);
+                CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc, Quaternion.identity);
 
-            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
-            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
 
             if (Random.value <= 0.3)
-                InstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
+                CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + inc + Random.insideUnitSphere * distance, Quaternion.identity);
         }
 
         // spawn endless Asteroids from startSpawn
         while (true)
         {
             if (Random.value <= 0.5)
-                InstantiateAsteroidOnServerThenUpdateClient(startSpawn, Quaternion.identity);
+                CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn, Quaternion.identity);
 
-            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
-            InstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+            CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
 
             if (Random.value <= 0.3)
-                InstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
+                CmdInstantiateAsteroidOnServerThenUpdateClient(startSpawn + Random.insideUnitSphere * distance, Quaternion.identity);
 
             RpcUpdateAsteroidHolder();
             yield return new WaitForSeconds(asteroidSpawnWaitSeconds);
@@ -257,7 +275,8 @@ public class GameController : NetworkBehaviour
         AsteroidsHolder.name = "Asteroid Holder (" + AsteroidsHolder.transform.childCount + ")";
     }
 
-    private void InstantiateAsteroidOnServerThenUpdateClient(Vector3 startingPosition, Quaternion startingRotation)
+    [Command]
+    private void CmdInstantiateAsteroidOnServerThenUpdateClient(Vector3 startingPosition, Quaternion startingRotation)
     {
         if (isServer == false) throw new System.Exception("Unauthorized Access to instantiating Asteroids");
         GameObject asteroid = Instantiate(AsteroidPrefab, startingPosition, startingRotation);

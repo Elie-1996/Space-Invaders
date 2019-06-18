@@ -20,7 +20,7 @@ public class Utils
     public const string TagRedScreen= "redScreen";
     public const int AsteroidScore = 1;
     public const int EnemyScore = 10;
-    private static Vector3 asteroidDirection;
+
     public static int getScoreByCollider(string tag)
     {
         if (tag == Utils.TagAsteroid)
@@ -49,11 +49,6 @@ public class Utils
         return getUniformScale(gameBackground) / 2.0f;
     }
 
-    public static void setAsteroidDirection(Vector3 direction)
-    {
-        asteroidDirection = direction.normalized;
-    }
-    public static Vector3 getAsteroidDirection() => asteroidDirection;
     public static Vector3 getRandomDirection() => new Vector3(
             (Random.value + 0.01f) * (Random.value < 0.5 ? 1 : -1),
             (Random.value + 0.01f) * (Random.value < 0.5 ? 1 : -1),
