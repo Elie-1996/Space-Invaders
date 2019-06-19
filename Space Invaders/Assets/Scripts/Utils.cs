@@ -18,6 +18,7 @@ public class Utils
     public const string TagSpotLight2 = "spotLight2";
     public const string TagPontLight = "pointLight";
     public const string TagRedScreen= "redScreen";
+    public const string TagNetworkScript = "NetworkScript";
     public const int AsteroidScore = 1;
     public const int EnemyScore = 10;
 

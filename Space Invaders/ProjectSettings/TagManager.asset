@@ -17,6 +17,7 @@ TagManager:
   - spotLight1
   - ThirdCam
   - redScreen
+  - NetworkScript
   layers:
   - Default
   - TransparentFX

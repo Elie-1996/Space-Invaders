@@ -103,6 +103,11 @@ public class Movement : NetworkBehaviour
         shouldPlayDanger = false;
     }
 
+    private void Awake()
+    {
+        GameObject.FindGameObjectWithTag(Utils.TagNetworkScript).GetComponent<NetworkScript>().GetComponent<AudioListener>().enabled = false;
+    }
+
     private void Start()
     {
         if (hasAuthority == false) return;
