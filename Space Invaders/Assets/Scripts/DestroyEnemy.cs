@@ -21,7 +21,7 @@ public class DestroyEnemy : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         int score =0;
-        if (other.tag == Utils.TagBackground || other.tag == Utils.TagWoodBox)
+        if (other.tag == Utils.TagBackground || other.tag == Utils.TagWoodBox || other.tag == Utils.TagEnemy|| other.tag == Utils.TagAsteroid)
         {
             return;
         }
@@ -39,6 +39,7 @@ public class DestroyEnemy : NetworkBehaviour
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
                     Utils.CmdDestroyObjectByID(collider.gameObject.GetComponent<NetworkIdentity>());
+                    if(collider.tag == Utils.TagEnemy) { gameController.enemyKilled(); HandlePropOfGift(); }
                 }
                 Instantiate(rocke2Explosion, other.transform.position, other.transform.rotation);
                 gameController.addScore(score);
@@ -48,12 +49,22 @@ public class DestroyEnemy : NetworkBehaviour
         score = Utils.getScoreByCollider(tag);
         gameController.addScore(score);
         Instantiate(explosion, other.transform.position, other.transform.rotation);
-        int randomGift = Random.Range(1, 4);
-        GameObject gift =  Instantiate(woodBox, transform.position, transform.rotation);
-        HandleGiftColoring(randomGift);
-        gift.SendMessage("onStart", randomGift);
+        HandlePropOfGift();
         Utils.CmdDestroyObjectByID(other.gameObject.GetComponent<NetworkIdentity>());
         Utils.CmdDestroyObjectByID(gameObject.GetComponent<NetworkIdentity>());
+        gameController.enemyKilled();
+    }
+
+    public void HandlePropOfGift()
+    {
+        int rand = Random.Range(1, 101);
+        if(rand < 40)
+        {
+            int randomGift = Random.Range(1, 4);
+            GameObject gift = Instantiate(woodBox, transform.position, transform.rotation);
+            HandleGiftColoring(randomGift);
+            gift.SendMessage("onStart", randomGift);
+        }
     }
 
     private void HandleGiftColoring(int giftType)

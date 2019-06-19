@@ -21,7 +21,10 @@ public class DestroyAsteroid : NetworkBehaviour
     private void OnTriggerEnter(Collider other)
     {
         int score = 0;
-        if(other.tag == Utils.TagAsteroid || other.tag == Utils.TagBackground) { return; }
+        if(other.tag == Utils.TagAsteroid || other.tag == Utils.TagBackground) {
+            return; }
+        if (other.tag == Utils.TagEnemy) {
+            return; }
         if (other.tag == Utils.TagPlayer)
         {
             gameController.GameOverFunction();

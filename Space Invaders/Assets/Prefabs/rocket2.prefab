@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc620bae278138045a618a5fc4889155, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
+  speed: 26.85
   explosion: {fileID: 1627199668855820729, guid: 96a8d1135a4697c44bd614e365fc3574,
     type: 3}
   rocke2Explosion: {fileID: 4517798840485811100, guid: 55b13be727a5080469459c0de38e775e,

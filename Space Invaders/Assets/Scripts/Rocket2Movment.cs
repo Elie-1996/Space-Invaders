@@ -55,6 +55,7 @@ public class Rocket2Movment : NetworkBehaviour
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
                     Utils.CmdDestroyObjectByID(collider.gameObject.GetComponent<NetworkIdentity>());
+                    if(collider.tag == Utils.TagEnemy) { gameController.enemyKilled();}
                 }
                 Instantiate(rocke2Explosion, transform.position, transform.rotation);
                 gameController.addScore(score);

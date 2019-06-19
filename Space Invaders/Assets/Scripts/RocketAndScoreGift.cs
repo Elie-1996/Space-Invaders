@@ -9,7 +9,6 @@ public class RocketAndScoreGift : MonoBehaviour
 
     private float sw;
     private GameController gameController;
-    private AudioSource audioData;
     private bool shouldDestry;
     private int giftType;// 1 for extra master rocket, 2 for additional 25 score, 3 for 10 seconds 
     // Start is called before the first frame update
@@ -20,8 +19,6 @@ public class RocketAndScoreGift : MonoBehaviour
         {
             gameController = gameConrollerObject.GetComponent<GameController>();
         }
-        audioData = GetComponent<AudioSource>();
-        shouldDestry = false;
         sw = 0;
     }
 
@@ -29,7 +26,6 @@ public class RocketAndScoreGift : MonoBehaviour
     {
         if (other.tag == Utils.TagPlayer)
         {
-            audioData.Play();
             if (giftType == 1)  // extra master rocket
             {
                 gameController.setExtraRocket(true);
@@ -42,20 +38,14 @@ public class RocketAndScoreGift : MonoBehaviour
             {
                 gameController.setSpeedGift(true);
             }
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == Utils.TagPlayer)
-        {
-            shouldDestry = true;
+            gameController.playGiftSound();
+            Destroy(gameObject);
         }
     }
     // Update is called once per frame
     void Update()
     {
         sw += Time.deltaTime;
-        if (shouldDestry) { Destroy(gameObject); }
         if (sw > 8)
         {
             Instantiate(explosion, transform.position,transform.rotation);

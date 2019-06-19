@@ -12,7 +12,7 @@ public class GameController : NetworkBehaviour
     public GameObject AsteroidPrefab;
     public GameObject EnemyPrefab;
     public float asteroidSpawnWaitSeconds;
-    public float enemyIntervalSpawnWaitSeconds;
+    public float enemyIntervalSpawnWaitSeconds = 4;
     public Canvas canvas;
     public Text scoreTextPrefab;
     public Text gameOverTextPrefab;
@@ -38,13 +38,12 @@ public class GameController : NetworkBehaviour
     private bool speedGift;
 
     private GameObject AsteroidsHolder;
-
     [SyncVar]
     private Vector3 _AsteroidDirection;
 
     public Vector3 AsteroidDirection { get { return _AsteroidDirection; } }
     private Vector3 startSpawn;
-
+    private int enemisAlive;
     void loadGUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -60,6 +59,11 @@ public class GameController : NetworkBehaviour
         _RestartText.transform.SetParent(rTransform, false);
 
         if (isServer) score = 0;
+    }
+
+    public void playGiftSound()
+    {
+        GetComponents<AudioSource>()[1].Play();
     }
 
 
@@ -168,12 +172,12 @@ public class GameController : NetworkBehaviour
 
     IEnumerator SpawnLevel(int level)
     {
-        int enemisAlive = 0;
+        enemisAlive = 0;
         // spawn some enemies
         foreach (Transform child in Planets.transform)
         {
             if (child.gameObject.activeSelf == false) continue;
-            int enemiesToAdd = level * 3;
+            int enemiesToAdd = level;// * 3;
             enemisAlive += enemiesToAdd;
             StartCoroutine (SpawnEnemiesFromPlanet(child, enemiesToAdd));
         }
@@ -186,9 +190,16 @@ public class GameController : NetworkBehaviour
         for (int i = 0; i < amount; ++i)
         {
             //TODO: Avoiding to actually instantiate until movement is decided
-            //Instantiate(EnemyPrefab, planet.position, Quaternion.identity);
+            CmdSpawnEnemy(planet.position, Quaternion.identity);
             yield return new WaitForSeconds(enemyIntervalSpawnWaitSeconds);
         }
+    }
+
+    [Command]
+    private void CmdSpawnEnemy(Vector3 startingPosition, Quaternion startingRotation)
+    {
+        GameObject newEnemy = Instantiate(EnemyPrefab, startingPosition, startingRotation);
+        NetworkServer.Spawn(newEnemy);
     }
 
     void SpawnPlanets()
@@ -339,4 +350,5 @@ public class GameController : NetworkBehaviour
     public bool getExtraRocketStatus() { return extraRocket; }
     public bool getSpeedGift() { return speedGift; }
     public void setSpeedGift(bool status) { speedGift = status; }
+    public void enemyKilled() { enemisAlive--; }
 }

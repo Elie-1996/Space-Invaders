@@ -5730,7 +5730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b54b0c7eed3fa44ac704fa708f60f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 50
+  moveSpeed: 35.8
   rotationSpeed: 10
   cameras: {fileID: 588228475060808897}
   cameraSwitchRate: 0.5
@@ -5807,8 +5807,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0.61742544
+  MaxDistance: 29.169006
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -5945,8 +5945,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0.6171245
+  MaxDistance: 22.316772
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -6041,8 +6041,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0.62925315
+  MaxDistance: 18.514496
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
