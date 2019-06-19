@@ -4849,8 +4849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1e0724b4807d31429965514f8baf629, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 4
-  EscapeDirections: []
+  speed: 1000
 --- !u!114 &2696287714247730125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4988,11 +4987,11 @@ GameObject:
   - component: {fileID: 4745705768729768735}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &26363354673438001
 Transform:
   m_ObjectHideFlags: 0

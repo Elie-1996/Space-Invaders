@@ -32,6 +32,7 @@ public class GameController : NetworkBehaviour
     private int maxAllowedLevels;
     private bool shouldAdvanceLevel;
     private int level;
+    private bool playersInGameExist;
     private bool escape;
 
     private bool extraRocket;
@@ -101,6 +102,7 @@ public class GameController : NetworkBehaviour
         maxAllowedLevels = Planets.transform.childCount;
         level = 1;
         shouldAdvanceLevel = false;
+        playersInGameExist = false;
         StartCoroutine (LevelSystem());
     }
 
@@ -159,6 +161,7 @@ public class GameController : NetworkBehaviour
     IEnumerator LevelSystem()
     {
         if (isServer == false) throw new Utils.AttemptedUnauthorizedAccessLevelSystemException("hasAuthority = " + hasAuthority + ", isLocalPlayer = " + isLocalPlayer + ", isServer = " + isServer + ".");
+        yield return new WaitUntil(() => playersInGameExist);
         while (level < maxAllowedLevels)
         {
             shouldAdvanceLevel = false;
@@ -217,6 +220,7 @@ public class GameController : NetworkBehaviour
 
     private void Update()
     {
+        playersInGameExist = GameObject.FindGameObjectWithTag(Utils.TagPlayer) != null;
         if (restart)
         {
             if (Input.GetKeyDown(KeyCode.R))
