@@ -17,8 +17,12 @@ public class GameController : NetworkBehaviour
     public Text scoreTextPrefab;
     public Text gameOverTextPrefab;
     public Text RestartTextPrefab;
+    public RawImage winImage;
+    private GameObject _winImage;
     public Text levelText;
     private GameObject _level;
+    public Text win;
+    private GameObject _winning;
     private int showLevelFor40Frame;
     private GameObject _scoreText;
     private GameObject _gameOverText;
@@ -64,6 +68,12 @@ public class GameController : NetworkBehaviour
         _level = Instantiate(levelText.gameObject);
         _level.transform.SetParent(rTransform, false);
 
+        _winning = Instantiate(win.gameObject);
+        _winning.transform.SetParent(rTransform, false);
+
+        _winImage = Instantiate(winImage.gameObject);
+        _winImage.transform.SetParent(rTransform, false);
+
         if (isServer) score = 0;
     }
 
@@ -88,6 +98,8 @@ public class GameController : NetworkBehaviour
         escape = true;
         _gameOverText.GetComponent<Text>().text = "";
         _RestartText.GetComponent<Text>().text = "";
+        _winImage.GetComponent<RawImage>().enabled = false;
+        _winning.GetComponent<Text>().text = "";
         if (isServer == false)
         {
             AsteroidsHolder = new GameObject("Asteroid Holder");
@@ -174,6 +186,9 @@ public class GameController : NetworkBehaviour
             yield return new WaitUntil(()=> shouldAdvanceLevel == true);
             ++level;
         }
+        _winImage.GetComponent<RawImage>().enabled = true;
+        _winning.GetComponent<Text>().text = "Thats great :)\n You just won the game!";
+        GetComponents<AudioSource>()[2].Play();
         // Win Game! => Define Behaviour!
     }
     void showLevelText()
