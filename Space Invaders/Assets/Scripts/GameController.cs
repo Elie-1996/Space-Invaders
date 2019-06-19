@@ -17,7 +17,9 @@ public class GameController : NetworkBehaviour
     public Text scoreTextPrefab;
     public Text gameOverTextPrefab;
     public Text RestartTextPrefab;
-
+    public Text levelText;
+    private GameObject _level;
+    private int showLevelFor40Frame;
     private GameObject _scoreText;
     private GameObject _gameOverText;
     private GameObject _RestartText;
@@ -57,6 +59,9 @@ public class GameController : NetworkBehaviour
 
         _RestartText = Instantiate(RestartTextPrefab.gameObject);
         _RestartText.transform.SetParent(rTransform, false);
+
+        _level = Instantiate(levelText.gameObject);
+        _level.transform.SetParent(rTransform, false);
 
         if (isServer) score = 0;
     }
@@ -169,10 +174,23 @@ public class GameController : NetworkBehaviour
         }
         // Win Game! => Define Behaviour!
     }
-
+    void showLevelText()
+    {
+        if(showLevelFor40Frame != 0)
+        {
+            showLevelFor40Frame--;
+            _level.GetComponent<Text>().text = "LEVEL " + level + "!";
+        }
+        else
+        {
+            _level.GetComponent<Text>().text ="";
+        }
+    }
     IEnumerator SpawnLevel(int level)
     {
         enemisAlive = 0;
+        showLevelFor40Frame = 40;
+        showLevelText();
         // spawn some enemies
         foreach (Transform child in Planets.transform)
         {
@@ -241,6 +259,7 @@ public class GameController : NetworkBehaviour
                 escape = true;
             }
         }
+        showLevelText();
     }
 
     IEnumerator SpawnAsteroidsHelper()
