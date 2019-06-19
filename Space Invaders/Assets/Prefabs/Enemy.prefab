@@ -4850,6 +4850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 4
+  EscapeDirections: []
 --- !u!114 &2696287714247730125
 MonoBehaviour:
   m_ObjectHideFlags: 0
