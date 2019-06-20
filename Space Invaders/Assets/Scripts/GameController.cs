@@ -23,6 +23,8 @@ public class GameController : NetworkBehaviour
     private GameObject _level;
     public Text win;
     private GameObject _winning;
+    public GameObject chat;
+    private GameObject _chat;
     private int showLevelFor40Frame;
     private GameObject _scoreText;
     private GameObject _gameOverText;
@@ -51,6 +53,10 @@ public class GameController : NetworkBehaviour
     public Vector3 AsteroidDirection { get { return _AsteroidDirection; } }
     private Vector3 startSpawn;
     private int enemisAlive;
+
+    private uint[] playersIndex = new uint[10]{0,0,0,0,0,0,0,0,0,0};
+
+    private Color[] colors = new Color[] {Color.blue, Color.cyan, Color.magenta, Color.red, Color.white, Color.yellow };
     void loadGUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -73,6 +79,9 @@ public class GameController : NetworkBehaviour
 
         _winImage = Instantiate(winImage.gameObject);
         _winImage.transform.SetParent(rTransform, false);
+
+        _chat = Instantiate(chat.gameObject);
+        _chat.transform.SetParent(rTransform, false);
 
         if (isServer) score = 0;
     }
@@ -388,4 +397,20 @@ public class GameController : NetworkBehaviour
     public bool getSpeedGift() { return speedGift; }
     public void setSpeedGift(bool status) { speedGift = status; }
     public void enemyKilled() { enemisAlive--; }
+    public void putMessage(int playerIndex,string message)
+    {
+        ConsoleOutput.Instance.PostMessage("Player" + playerIndex + ": " + message + ".",getRandomColor());
+    }
+    private Color getRandomColor() { return colors[Random.Range(0, colors.Length)]; }
+    public int setAndGetPlayerIndex(uint netWorkIndex)
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            if (playersIndex[i] == 0) {
+                playersIndex[i] = netWorkIndex;
+                return i;
+            }
+        }
+        return -1;
+    }
 }

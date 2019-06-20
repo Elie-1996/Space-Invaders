@@ -826,6 +826,7 @@ GameObject:
   - component: {fileID: 1312137577}
   - component: {fileID: 1312137579}
   - component: {fileID: 1312137580}
+  - component: {fileID: 1312137581}
   m_Layer: 0
   m_Name: NetworkController
   m_TagString: NetworkScript
@@ -1127,6 +1128,22 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1312137575}
   m_Enabled: 1
+--- !u!114 &1312137581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312137575}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4394a3eef724546f896557197e2d6c44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  showGUI: 1
+  offsetX: 0
+  offsetY: 0
 --- !u!1 &1353600555
 GameObject:
   m_ObjectHideFlags: 0
@@ -1710,6 +1727,7 @@ MonoBehaviour:
   levelText: {fileID: 4269408053620697409, guid: d136f0544d6f88348980ce148e7097e7,
     type: 3}
   win: {fileID: 8397020429353834081, guid: b6826cab461f12b41bce24ed3b07fe7a, type: 3}
+  chat: {fileID: 6729619538836590907, guid: ebf88576c4f83384a8c07dfa806683e9, type: 3}
 --- !u!4 &1655137214
 Transform:
   m_ObjectHideFlags: 0

@@ -5736,8 +5736,6 @@ MonoBehaviour:
   cameraSwitchRate: 0.5
   rocket2Text: {fileID: 566757152299495548, guid: 39499984d76df2840b735da12c9dd9a1,
     type: 3}
-  redAlertCanvasPrefab: {fileID: 3098896334880075219, guid: b4bf08c3c1f9f5846ac9ed071a13c51c,
-    type: 3}
   canvas: {fileID: 1638162266191859437, guid: f0f3c11d1ea7a9b45b3b89ec54510ed0, type: 3}
   AstroPrefab: {fileID: 4500173850422623248, guid: c743a5256d7f42c448f8f49adeac5661,
     type: 3}
@@ -5756,6 +5754,8 @@ MonoBehaviour:
   redMessage: {fileID: 4772998857138310088, guid: dd5a462b1bb3f1245854809e1bef82bd,
     type: 3}
   welcomeMessagePrefab: {fileID: 1348936879879372975, guid: 7cbeda87de83c454f96f72e7250603eb,
+    type: 3}
+  mainInputFieldPrefab: {fileID: 6526528078710211186, guid: 069df3a5d138d1741b224f4271d34892,
     type: 3}
   rocket1: {fileID: 4846516266908086113, guid: 6f6f55d1c7bcdb4439ae93a83fca02c2, type: 3}
   rocket1Shot: {fileID: 5894320779073434328}
