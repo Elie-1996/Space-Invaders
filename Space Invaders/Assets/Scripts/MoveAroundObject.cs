@@ -167,7 +167,9 @@ public class MoveAroundObject : NetworkBehaviour
         if (Mathf.Abs(currentRadiusMovement) > Mathf.Abs(defaultRadiusMovement))
             currentRadiusMovement = defaultRadiusMovement;
         if (justStartedTime <= EnoughTimePassed) currentRadiusMovement = 0.0f;
-        if (Vector3.Distance(targetTransform.position, transform.position) <= 20.0f) currentRadiusMovement = 0.0f;
+        float distanceFromTarget = Vector3.Distance(targetTransform.position, transform.position);
+        if (distanceFromTarget <= 20.0f) currentRadiusMovement = 0.0f;
+        if (distanceFromTarget >= 50.0f) currentRadiusMovement = 0.0f;
         float realSpeed = decideSpeed(targetTransform);
         Vector3 direction = (targetTransform.position - transform.position).normalized;
         enemyRigidBody.velocity = Time.deltaTime * realSpeed * (direction + new Vector3(Mathf.Cos(timeCounter), Mathf.Sin(timeCounter), 0.0f) * currentRadiusMovement);
