@@ -182,15 +182,38 @@ public class GameController : NetworkBehaviour
         {
             shouldAdvanceLevel = false;
             SpawnPlanets();
-            StartCoroutine (SpawnLevel(level));
-            yield return new WaitUntil(()=> shouldAdvanceLevel == true);
+            StartCoroutine(SpawnLevel(level));
+            yield return new WaitUntil(() => shouldAdvanceLevel == true);
             ++level;
         }
-        _winImage.GetComponent<RawImage>().enabled = true;
+        // Win Game! => Define Behaviour!
+        Win();
+    }
+
+    private void Win()
+    {
+        //_winImage.GetComponent<RawImage>().enabled = true;
         _winning.GetComponent<Text>().text = "Thats great :)\n You just won the game!";
         GetComponents<AudioSource>()[2].Play();
-        // Win Game! => Define Behaviour!
+        GameObject[] players = GameObject.FindGameObjectsWithTag(Utils.TagPlayer);
+        foreach (GameObject player in players)
+        {
+            GameObject fireworks = FindChildGameObjectWithTag(player, Utils.TagFireworks);
+            if (fireworks == null) { Debug.LogError("Failed to find fireworks for the player"); break; }
+            fireworks.SetActive(true);
+        }
     }
+
+    GameObject FindChildGameObjectWithTag(GameObject parent, string tag)
+    {
+        foreach (Transform o in parent.transform)
+        {
+            if (o.tag == tag) return o.gameObject;
+        }
+
+        return null;
+    }
+
     void showLevelText()
     {
         if(showLevelFor40Frame != 0)
