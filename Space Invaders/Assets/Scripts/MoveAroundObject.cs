@@ -10,8 +10,8 @@ public class MoveAroundObject : NetworkBehaviour
     public float speed;
     public float closeApproximity;
 
-    public GameObject radiusCenter;
-    public float radiusMovement;
+    public float defaultRadiusMovement;
+    private float currentRadiusMovement;
     private float timeCounter;
 
     private int attackType;
@@ -28,10 +28,14 @@ public class MoveAroundObject : NetworkBehaviour
     private bool steering;
     private float steeringTime;
     private Vector3 steerLocation;
+    private float justStartedTime;
+    private float EnoughTimePassed = 15.0f;
 
     private void Start()
     {
         if (isServer == false) return;
+        currentRadiusMovement = defaultRadiusMovement;
+        justStartedTime = 0.0f;
         isSteerer = Random.value <= 0.5 ? true : false;
         steering = false;
         steeringTime = 0.0f;
@@ -77,7 +81,7 @@ public class MoveAroundObject : NetworkBehaviour
     private void AttackPlan(Transform targetTransform)
     {
         if (shouldSteerFromEnemies())
-            SteerFromCloseEnemies(); 
+            SteerFromCloseEnemies();
         else if (attackType == 1)
             MoveTowardsTarget(targetTransform);
         else if (attackType == 2)
@@ -157,10 +161,16 @@ public class MoveAroundObject : NetworkBehaviour
 
     private void CirculateAroundTarget(Transform targetTransform)
     {
+        justStartedTime += Time.deltaTime;
         timeCounter += Time.deltaTime;
+        currentRadiusMovement -= Time.deltaTime;
+        if (Mathf.Abs(currentRadiusMovement) > Mathf.Abs(defaultRadiusMovement))
+            currentRadiusMovement = defaultRadiusMovement;
+        if (justStartedTime <= EnoughTimePassed) currentRadiusMovement = 0.0f;
+        if (Vector3.Distance(targetTransform.position, transform.position) <= 20.0f) currentRadiusMovement = 0.0f;
         float realSpeed = decideSpeed(targetTransform);
         Vector3 direction = (targetTransform.position - transform.position).normalized;
-        enemyRigidBody.velocity = direction * realSpeed * Time.deltaTime + new Vector3(Mathf.Cos(timeCounter), Mathf.Sin(timeCounter), 0.0f) * radiusMovement;
+        enemyRigidBody.velocity = Time.deltaTime * realSpeed * (direction + new Vector3(Mathf.Cos(timeCounter), Mathf.Sin(timeCounter), 0.0f) * currentRadiusMovement);
         if (timeCounter >= 360.0f) timeCounter = 0.0f;
     }
 

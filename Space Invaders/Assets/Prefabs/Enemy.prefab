@@ -4852,8 +4852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 1000
   closeApproximity: 50
-  radiusCenter: {fileID: 0}
-  radiusMovement: 0
+  defaultRadiusMovement: 4.5
 --- !u!114 &2696287714247730125
 MonoBehaviour:
   m_ObjectHideFlags: 0
