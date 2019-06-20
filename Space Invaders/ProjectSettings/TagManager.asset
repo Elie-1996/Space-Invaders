@@ -18,6 +18,10 @@ TagManager:
   - ThirdCam
   - redScreen
   - NetworkScript
+  - Fireworks
+  - Ship
+  - Waypoint
+  - Chat
   layers:
   - Default
   - TransparentFX

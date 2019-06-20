@@ -24,11 +24,6 @@ public class Rocket1Mover : NetworkBehaviour
             return;
         }
 
-        // initialize the velocity locally
-        //rigidbody.velocity = transform.up * speed;
-
-        // initialize the velocity for everyone else
-        //CmdInitializeVelocity(transform.up);
         RpcInitializeVelocity(transform.up);
     }
 

@@ -31,9 +31,17 @@ public class MoveAroundObject : NetworkBehaviour
     private float justStartedTime;
     private float EnoughTimePassed = 15.0f;
 
+    private float trickTimePassed;
+    private float trickTime;
+    private bool currentlyTricking;
+    private Vector3 trickDirection;
+
     private void Start()
     {
         if (isServer == false) return;
+        trickTime = 10.0f;//Random.Range(40.0f, 90.0f);
+        trickTimePassed = 0.0f;
+        currentlyTricking = false;
         currentRadiusMovement = defaultRadiusMovement;
         justStartedTime = 0.0f;
         isSteerer = Random.value <= 0.5 ? true : false;
@@ -82,6 +90,8 @@ public class MoveAroundObject : NetworkBehaviour
     {
         if (shouldSteerFromEnemies())
             SteerFromCloseEnemies();
+        else if (shouldTrickPlayer())
+            TrickPlayer(targetTransform);
         else if (attackType == 1)
             MoveTowardsTarget(targetTransform);
         else if (attackType == 2)
@@ -90,6 +100,34 @@ public class MoveAroundObject : NetworkBehaviour
             RandomMovement();
         else
             throw new System.Exception("Incorrect attack type was = " + attackType);
+    }
+
+    private void TrickPlayer(Transform playerTransform)
+    {
+        if (currentlyTricking == false)
+            trickDirection = playerTransform.right * Random.Range(-1, 1) + playerTransform.forward * Random.Range(-1, 0);
+        currentlyTricking = true;
+
+        float distanceFromPlayer = 30.0f;
+        Vector3 newPosition = trickDirection * distanceFromPlayer + playerTransform.position;
+        if (Vector3.Distance(newPosition, transform.position) <= 2.0f)
+        {
+            trickTimePassed = 0.0f;
+            currentlyTricking = false;
+        }
+        MoveTowardsTarget(newPosition);
+    }
+
+    private bool shouldTrickPlayer()
+    {
+        if (currentlyTricking == true) return true;
+        trickTimePassed += Time.deltaTime;
+        if (trickTimePassed > trickTime)
+        {
+            trickTimePassed = 0.0f;
+            return true;
+        }
+        return false;
     }
 
     private bool shouldSteerFromEnemies()
