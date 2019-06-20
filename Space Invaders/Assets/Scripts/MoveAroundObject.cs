@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine;
 
 // <<warning>>
 // this class should not be called unless there are players!!
-public class MoveAroundObject : MonoBehaviour
+public class MoveAroundObject : NetworkBehaviour
 {
     public float speed;
     public float closeApproximity;
@@ -23,8 +24,18 @@ public class MoveAroundObject : MonoBehaviour
     private bool decidedRandomPosition;
     private float waitTimeRandomMovementPassed;
 
+    private bool isSteerer;
+    private bool steering;
+    private float steeringTime;
+    private Vector3 steerLocation;
+
     private void Start()
     {
+        if (isServer == false) return;
+        isSteerer = Random.value <= 0.5 ? true : false;
+        steering = false;
+        steeringTime = 0.0f;
+        steerLocation = Vector3.zero;
         waitTimeRandomMovementPassed = 0.0f;
         decidedRandomPosition = false;
         gameRadius = Utils.getGameBoundaryRadius(GameObject.FindGameObjectWithTag(Utils.TagBackground));
@@ -56,15 +67,18 @@ public class MoveAroundObject : MonoBehaviour
     // physics
     private void FixedUpdate()
     {
+        if (isServer == false) return;
         if (playerIndexToAttack == -1) return;
         GameObject player = players[playerIndexToAttack];
         FaceTarget(player.transform);
-        Attack(player.transform);
+        AttackPlan(player.transform);
     }
 
-    private void Attack(Transform targetTransform)
+    private void AttackPlan(Transform targetTransform)
     {
-        if (attackType == 1)
+        if (shouldSteerFromEnemies())
+            SteerFromCloseEnemies(); 
+        else if (attackType == 1)
             MoveTowardsTarget(targetTransform);
         else if (attackType == 2)
             CirculateAroundTarget(targetTransform);
@@ -72,6 +86,47 @@ public class MoveAroundObject : MonoBehaviour
             RandomMovement();
         else
             throw new System.Exception("Incorrect attack type was = " + attackType);
+    }
+
+    private bool shouldSteerFromEnemies()
+    {
+        if (isSteerer == false) return false;
+        return (Random.value <= 0.1 && steering == false) || // check if we should try to steer & start steering if so!
+        (steering == true); // we are currently steering, so continue doing that
+    }
+
+    private void SteerFromCloseEnemies()
+    {
+        float radiusToSteerTo = 20.0f;
+        if (steering == false)
+        {
+            Collider[] closeObjects = Physics.OverlapSphere(transform.position, 5.0f);
+            foreach (Collider col in closeObjects)
+            {
+                if (col.tag == Utils.TagEnemy && col.gameObject.GetComponent<NetworkIdentity>().netId != gameObject.GetComponent<NetworkIdentity>().netId)
+                {
+                    Vector3 randomDir = Utils.getRandomDirection();
+                    steerLocation = randomDir * radiusToSteerTo + transform.position;
+                    MoveTowardsTarget(steerLocation);
+                    steering = true;
+                    break;
+                }
+            }
+        }
+        else if (steeringTime >= 6.5f)
+        {
+            // should stop steering.
+            steering = false;
+            steeringTime = 0.0f;
+        }
+        else if (steering == true)
+        {
+            if (Vector3.Distance(steerLocation, transform.position) <= 0.2f)
+                steerLocation = Utils.getRandomDirection() * radiusToSteerTo + transform.position;
+            steeringTime += Time.deltaTime;
+            FaceTarget(steerLocation);
+            SteerToTarget(steerLocation);
+        }
     }
 
     private void RandomMovement()
@@ -111,22 +166,32 @@ public class MoveAroundObject : MonoBehaviour
 
     private void MoveTowardsTarget(Transform targetTransform)
     {
-        float realSpeed = decideSpeed(targetTransform);
-        Vector3 direction = (targetTransform.position - transform.position).normalized;
+        MoveTowardsTarget(targetTransform.position);
+    }
+
+    private void MoveTowardsTarget(Vector3 targetPosition)
+    {
+        float realSpeed = decideSpeed(targetPosition);
+        Vector3 direction = (targetPosition - transform.position).normalized;
+        enemyRigidBody.velocity = direction * realSpeed * Time.deltaTime;
+    }
+
+    private void SteerToTarget(Vector3 targetPosition)
+    {
+        float realSpeed = speed * 0.4f;
+        Vector3 direction = (targetPosition - transform.position).normalized;
         enemyRigidBody.velocity = direction * realSpeed * Time.deltaTime;
     }
 
     private float decideSpeed(Transform targetTransform)
     {
-        if (Vector3.Distance(targetTransform.position, transform.position) <= closeApproximity)
-            return speed / 5.0f;
-        return speed;
+        return decideSpeed(targetTransform.position);
     }
 
     private float decideSpeed(Vector3 targetPosition)
     {
         if (Vector3.Distance(targetPosition, transform.position) <= closeApproximity)
-            return speed / 5.0f;
+            return speed / 3.0f;
         return speed;
     }
 
@@ -146,6 +211,7 @@ public class MoveAroundObject : MonoBehaviour
 
     private void Update()
     {
+        if (isServer == false) return;
         if (playerIndexToAttack != -1) return;
         ChoosePlayerToAttack();
         DecideAttackType();
