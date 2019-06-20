@@ -5789,6 +5789,8 @@ MonoBehaviour:
     type: 3}
   welcomeMessagePrefab: {fileID: 1348936879879372975, guid: 7cbeda87de83c454f96f72e7250603eb,
     type: 3}
+  mainInputFieldPrefab: {fileID: 6526528078710211186, guid: 069df3a5d138d1741b224f4271d34892,
+    type: 3}
   rocket1: {fileID: 4846516266908086113, guid: 6f6f55d1c7bcdb4439ae93a83fca02c2, type: 3}
   rocket1Shot: {fileID: 5894320779073434328}
   rocket2: {fileID: 5321511392138099100, guid: 97505c2cc67c81c4bbb9fe45d6ad2c61, type: 3}

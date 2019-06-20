@@ -22,6 +22,7 @@ public class Movement : NetworkBehaviour
     public Image redImage;
     public Text redMessage;
     public Text welcomeMessagePrefab;
+    public InputField mainInputFieldPrefab;
 
     private GameObject _Astro;
     private GameObject _masterRocket1;
@@ -32,6 +33,7 @@ public class Movement : NetworkBehaviour
     private GameObject _welcomeMessage;
     private GameObject _redMessage;
     private GameObject _redPicture;
+    private GameObject mainInputField;
     private bool showWelcomeMessage;
 
     public GameObject rocket1;
@@ -53,6 +55,12 @@ public class Movement : NetworkBehaviour
     private Text dangerText;
     private bool shouldPlayDanger;
 
+    private string helpMeMessagePress1 = "Help me I'm dying!";
+    private string comeHerePress2 = "come here";
+    private string HurayPress3 = "Huray :)";
+    private int playerIndex;
+    private bool userTyping;
+    private bool sendMessageOnce;
     public override void OnStartAuthority()
     {
         Start();
@@ -88,6 +96,9 @@ public class Movement : NetworkBehaviour
 
         _welcomeMessage = Instantiate(welcomeMessagePrefab.gameObject);
         _welcomeMessage.transform.SetParent(rTransform, false);
+
+        mainInputField = Instantiate(mainInputFieldPrefab.gameObject);
+        mainInputField.transform.SetParent(rTransform, false);
     }
 
     private void InitializeRedAlertVariables()
@@ -127,6 +138,10 @@ public class Movement : NetworkBehaviour
             gameController = gameConrollerObject.GetComponent<GameController>();
         }
         InitializeRedAlertVariables();
+        playerIndex = gameController.setAndGetPlayerIndex(GetComponent<NetworkIdentity>().netId.Value);
+        userTyping = false;
+        sendMessageOnce = false;
+        mainInputField.SetActive(false);
     }
 
 
@@ -137,18 +152,50 @@ public class Movement : NetworkBehaviour
         {
             WelcomeMessage();
         }
-        else
+        else if(!userTyping)
         {
             HandleSwitchingActiveCamera();
             HandleShooting();
             HandleDistanceFromBoundary();
+            HandleQuickMessage();
+            if (Input.GetKeyDown(KeyCode.T)) { userTyping = true; }
+        }
+        else if (userTyping)
+        {
+            HandleRegularMessage();
         }
     }
-
+    private void HandleRegularMessage()
+    {
+        mainInputField.SetActive(true);
+        mainInputField.GetComponent<InputField>().Select();
+        mainInputField.GetComponent<InputField>().ActivateInputField();
+        mainInputField.GetComponent<InputField>().onEndEdit.AddListener(getMessageFromUi);
+    }
+    private void getMessageFromUi(string message)
+    {
+        if(message.Length == 0) { mainInputField.SetActive(false); userTyping = false; }
+        mainInputField.GetComponent<InputField>().DeactivateInputField();
+        if (userTyping) { gameController.putMessage(playerIndex, message); mainInputField.SetActive(false); }
+        userTyping = false;
+    }
+    private void HandleQuickMessage()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)){
+            gameController.putMessage(playerIndex, helpMeMessagePress1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2)){
+            gameController.putMessage(playerIndex, comeHerePress2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3)){
+            gameController.putMessage(playerIndex, HurayPress3);
+        }
+    }
     private void FixedUpdate()
     {
         if (hasAuthority == false) return;
         if (hasAuthority == false) return;
+        if (userTyping) return;
         if (showWelcomeMessage == true) return;
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         if (rigidbody == null)
