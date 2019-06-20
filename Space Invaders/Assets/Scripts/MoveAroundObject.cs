@@ -232,7 +232,7 @@ public class MoveAroundObject : NetworkBehaviour
     private void DecideAttackType()
     {
         if (Random.value <= 0.2) attackType = 3;
-        else  attackType = Random.value <= 0.5 ? 1 : 2;
+        else  attackType = Random.value <= 0.65 ? 1 : 2;
     }
 
     private void ChoosePlayerToAttack()
