@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 508501569613530951}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.106, y: -0.14, z: -5.879}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -0.181, y: 0.023, z: -0.577}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1161068479461717634}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!198 &5312472254113654289
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -284,7 +284,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4818,8 +4818,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.0695498, y: 0.73821884, z: 1.305304}
-  m_Center: {x: 0.11417775, y: -0.027452022, z: -2.743325}
+  m_Size: {x: 0.6717139, y: 0.14022511, z: 0.778967}
+  m_Center: {x: 0.0046967566, y: -0.033554047, z: -0.15274662}
 --- !u!114 &1161068479461717663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4850,6 +4850,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1000
+  closeApproximity: 0
+  radiusCenter: {fileID: 0}
+  radiusMovement: 0
 --- !u!114 &2696287714247730125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4908,7 +4911,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4429756114301475699}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2.396}
+  m_LocalPosition: {x: 0, y: 0.15, z: -0.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1161068479461717634}
@@ -4926,7 +4929,7 @@ Light:
   m_Type: 2
   m_Color: {r: 0.9528302, g: 0.35506406, b: 0.35506406, a: 1}
   m_Intensity: 1
-  m_Range: 4.23
+  m_Range: 3.863496
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -4970,7 +4973,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 4.5905e-41, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -5068,9 +5071,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: millenium-falcon
       objectReference: {fileID: 0}
+    - target: {fileID: 100070, guid: f8459738d05d0a749b1a2487a9d8ca88, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: f8459738d05d0a749b1a2487a9d8ca88, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.089
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: f8459738d05d0a749b1a2487a9d8ca88, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5078,7 +5085,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: f8459738d05d0a749b1a2487a9d8ca88, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2.52
       objectReference: {fileID: 0}
     - target: {fileID: 400070, guid: f8459738d05d0a749b1a2487a9d8ca88, type: 3}
       propertyPath: m_LocalRotation.x
