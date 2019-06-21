@@ -11,6 +11,7 @@ public class DestroyAsteroid : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (isServer == false) return;
         GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
         if (gameConrollerObject != null)
         {
@@ -20,6 +21,7 @@ public class DestroyAsteroid : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (isServer == false) return;
         int score = 0;
         if(other.tag == Utils.TagAsteroid || other.tag == Utils.TagBackground) {
             return; }
