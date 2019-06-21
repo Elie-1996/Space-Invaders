@@ -46,6 +46,8 @@ public class GameController : NetworkBehaviour
     private bool escape;
 
     private bool extraRocket;
+
+    [SyncVar]
     private bool speedGift;
 
     private GameObject AsteroidsHolder;
@@ -443,14 +445,13 @@ public class GameController : NetworkBehaviour
         audioData.Play();
     }
     public void setExtraRocket(bool status) {
-        if (isServer == false)
-            CmdUpdateExtraRocketStatus(status);
-        else
-            extraRocket = status;
+        extraRocket = status;
+        if (isServer == true && status == true)
+            RpcUpdateExtraRocketStatus(status);
     }
 
-    [Command]
-    private void CmdUpdateExtraRocketStatus(bool status)
+    [ClientRpc]
+    private void RpcUpdateExtraRocketStatus(bool status)
     {
         extraRocket = status;
     }
