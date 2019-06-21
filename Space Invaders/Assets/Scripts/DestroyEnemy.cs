@@ -9,6 +9,9 @@ public class DestroyEnemy : NetworkBehaviour
     public GameObject rocke2Explosion;
     public GameObject woodBox;
     private GameController gameController;
+
+    private const float giftProbability = 0.4f;
+
     private void Start()
     {
         GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
@@ -39,7 +42,7 @@ public class DestroyEnemy : NetworkBehaviour
                     score += Utils.getScoreByCollider(collider.tag);
                     Instantiate(explosion, collider.transform.position, collider.transform.rotation);
                     Utils.CmdDestroyObjectByID(collider.gameObject.GetComponent<NetworkIdentity>());
-                    if(collider.tag == Utils.TagEnemy) { gameController.enemyKilled(); HandlePropOfGift(); }
+                    if(collider.tag == Utils.TagEnemy) { gameController.enemyKilled(); SpawnGiftWithProbability(); }
                 }
                 Instantiate(rocke2Explosion, other.transform.position, other.transform.rotation);
                 gameController.addScore(score);
@@ -49,46 +52,39 @@ public class DestroyEnemy : NetworkBehaviour
         score = Utils.getScoreByCollider(tag);
         gameController.addScore(score);
         Instantiate(explosion, other.transform.position, other.transform.rotation);
-        HandlePropOfGift();
+        SpawnGiftWithProbability();
         Utils.CmdDestroyObjectByID(other.gameObject.GetComponent<NetworkIdentity>());
         Utils.CmdDestroyObjectByID(gameObject.GetComponent<NetworkIdentity>());
         gameController.enemyKilled();
     }
 
-    public void HandlePropOfGift()
+    public void SpawnGiftWithProbability()
     {
-        int rand = Random.Range(1, 101);
-        if(rand < 40)
+        if(Random.value < giftProbability)
         {
             int randomGift = Random.Range(1, 4);
             GameObject gift = Instantiate(woodBox, transform.position, transform.rotation);
-            HandleGiftColoring(randomGift);
+            HandleGiftColoring(gift, randomGift);
             gift.SendMessage("onStart", randomGift);
         }
     }
 
-    private void HandleGiftColoring(int giftType)
+    private void HandleGiftColoring(GameObject gift, int giftType)
     {
-        Light pointLight = GameObject.FindGameObjectWithTag(Utils.TagPontLight).GetComponent<Light>();
-        Light spotLigh1 = GameObject.FindGameObjectWithTag(Utils.TagSpotLight1).GetComponent<Light>();
-        Light spotLigh2 = GameObject.FindGameObjectWithTag(Utils.TagSpotLight2).GetComponent<Light>();
         if (giftType == 1)  // extra master rocket
-        {
-            pointLight.color = Color.red;
-            spotLigh1.color = Color.red;
-            spotLigh2.color = Color.red;
-        }
+            ChooseColorForLights(gift, Color.red);
         else if (giftType == 2) //extra score
-        {
-            pointLight.color = Color.yellow;
-            spotLigh1.color = Color.yellow;
-            spotLigh2.color = Color.yellow;
-        }
+            ChooseColorForLights(gift, Color.yellow);
         else
+            ChooseColorForLights(gift, Color.blue);
+    }
+
+    private void ChooseColorForLights(GameObject gift, Color color)
+    {
+        Light[] lights = gift.GetComponentsInChildren<Light>();
+        foreach (Light light in lights)
         {
-            pointLight.color = Color.blue;
-            spotLigh1.color = Color.blue;
-            spotLigh2.color = Color.blue;
+            light.color = color;
         }
     }
 }
