@@ -75,7 +75,17 @@ public class DestroyEnemy : NetworkBehaviour
             HandleGiftColoring(gift, randomGift);
             gift.SendMessage("onStart", randomGift);
             NetworkServer.Spawn(gift);
+
+            RpcInitGiftBoxProperly(gift.GetComponent<NetworkIdentity>(), randomGift);
         }
+    }
+
+    [ClientRpc]
+    private void RpcInitGiftBoxProperly(NetworkIdentity giftNetworkIdentity, int giftType)
+    {
+        GameObject gift = giftNetworkIdentity.gameObject;
+        HandleGiftColoring(gift, giftType);
+        gift.SendMessage("onStart", giftType);
     }
 
     private void HandleGiftColoring(GameObject gift, int giftType)
