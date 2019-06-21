@@ -255,20 +255,13 @@ public class GameController : NetworkBehaviour
     {
         enemiesAlive = 0;
         showLevelText();
-        int counter = 0;
-        int enemiesToAdd = level;// * 3;
         // spawn some enemies
         foreach (Transform child in Planets.transform)
         {
             if (child.gameObject.activeSelf == false) continue;
-            counter++;
-            int adder = enemiesAlive + enemiesToAdd;
-            enemiesAlive = adder;
-            Debug.Log(enemiesAlive);
+            int enemiesToAdd = level;// * 3;
             StartCoroutine (SpawnEnemiesFromPlanet(child, enemiesToAdd));
         }
-        counter *= enemiesToAdd;
-        enemiesAlive = counter;
         yield return new WaitUntil(() => enemiesAlive == 0);
         shouldAdvanceLevel = true;
     }
@@ -278,6 +271,7 @@ public class GameController : NetworkBehaviour
         for (int i = 0; i < amount; ++i)
         {
             CmdSpawnEnemy(planet.position, Quaternion.identity);
+            enemiesAlive++;
             yield return new WaitForSeconds(enemyIntervalSpawnWaitSeconds);
         }
     }
@@ -334,9 +328,9 @@ public class GameController : NetworkBehaviour
         scoreCounter += Time.deltaTime;
         if (scoreCounter > 1) { _scoreText.GetComponent<Text>().color = Color.white; _scoreText.GetComponent<Text>().fontSize -= 5; }
     }
-    void showEnemiesCount(int something)
+    void showEnemiesCount(int newValue)
     {
-        _enemyCount.GetComponent<Text>().text = "Enemies left: " + enemiesAlive;
+        _enemyCount.GetComponent<Text>().text = "Enemies left: " + newValue;
     }
 
     IEnumerator SpawnAsteroidsHelper()
