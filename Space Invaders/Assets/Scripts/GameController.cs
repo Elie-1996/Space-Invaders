@@ -41,6 +41,8 @@ public class GameController : NetworkBehaviour
 
     private int maxAllowedLevels;
     private bool shouldAdvanceLevel;
+
+    [SyncVar(hook = "showLevelText")]
     private int level;
     private bool playersInGameExist;
     private bool escape;
@@ -241,22 +243,21 @@ public class GameController : NetworkBehaviour
         return null;
     }
 
-    void showLevelText()
+    void showLevelText(int newLevel)
     {
-        showLevelFor4Sec += Time.deltaTime;
-        if(showLevelFor4Sec <4)
-        {
-            _level.GetComponent<Text>().text = "LEVEL " + level + "!";
-        }
-        else
-        {
-            _level.GetComponent<Text>().text ="";
-        }
+        StartCoroutine(showLevelTextS(newLevel));
     }
+
+    IEnumerator showLevelTextS(int newLevel)
+    {
+        _level.GetComponent<Text>().text = "LEVEL " + newLevel + "!";
+        yield return new WaitForSeconds(4.0f);
+        _level.GetComponent<Text>().text = "";
+    }
+
     IEnumerator SpawnLevel(int level)
     {
         enemiesAlive = 0;
-        showLevelText();
         // spawn some enemies
         foreach (Transform child in Planets.transform)
         {
@@ -326,7 +327,6 @@ public class GameController : NetworkBehaviour
                 escape = true;
             }
         }
-        showLevelText();
         scoreCounter += Time.deltaTime;
         if (scoreCounter > 1) { _scoreText.GetComponent<Text>().color = Color.white; _scoreText.GetComponent<Text>().fontSize -= 5; }
     }
