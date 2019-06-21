@@ -39,7 +39,7 @@ public class MoveAroundObject : NetworkBehaviour
     private void Start()
     {
         if (isServer == false) return;
-        trickTime = 10.0f;//Random.Range(40.0f, 90.0f);
+        trickTime = Random.Range(40.0f, 90.0f);
         trickTimePassed = 0.0f;
         currentlyTricking = false;
         currentRadiusMovement = defaultRadiusMovement;
@@ -108,7 +108,7 @@ public class MoveAroundObject : NetworkBehaviour
             trickDirection = playerTransform.right * Random.Range(-1, 1) + playerTransform.forward * Random.Range(-1, 0);
         currentlyTricking = true;
 
-        float distanceFromPlayer = 30.0f;
+        float distanceFromPlayer = 18.0f;
         Vector3 newPosition = trickDirection * distanceFromPlayer + playerTransform.position;
         if (Vector3.Distance(newPosition, transform.position) <= 2.0f)
         {

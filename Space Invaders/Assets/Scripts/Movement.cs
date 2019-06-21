@@ -216,9 +216,9 @@ public class Movement : NetworkBehaviour
         float horizontalDirection = Input.GetAxis("Horizontal");
         if (gameController.getSpeedGift())
         {
-            extraSpeeedTime += Time.time;
+            extraSpeeedTime += Time.deltaTime;
             _moveSpeed = moveSpeed + 45f;
-            if(extraSpeeedTime > 10 * 1000) { gameController.setSpeedGift(false); }
+            if(extraSpeeedTime > 10) { gameController.setSpeedGift(false); }
         }
         else
         {

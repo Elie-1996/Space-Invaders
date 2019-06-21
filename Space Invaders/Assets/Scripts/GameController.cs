@@ -175,9 +175,9 @@ public class GameController : NetworkBehaviour
     private void InitiatePlanetLocationsOnServerAndUpdateForClients()
     {
         float radius = Utils.getGameBoundaryRadius(gameBackground) + 25.0f;
-        foreach (Transform child in Planets.transform)
+        for (int i = 0, size = Planets.transform.childCount; i < size; ++i)
         {
-            GameObject planet = child.gameObject;
+            GameObject planet = Planets.transform.GetChild(i).gameObject;
             // generate random location
             Vector3 direction = Utils.getRandomDirection();
 
@@ -185,17 +185,17 @@ public class GameController : NetworkBehaviour
             planet.transform.position = direction * radius;
             planet.SetActive(false);
             // let's update ALL of the clients, to change their planet locations according to the SERVER.
-            RpcUpdatePlanetLocationsOnClient(planet.GetComponent<NetworkIdentity>(), planet.transform.position, planet.activeSelf);
+            RpcUpdatePlanetLocationsOnClient(i, planet.transform.position, planet.transform.rotation, planet.activeSelf);
         }
     }
 
     [ClientRpc]
-    private void RpcUpdatePlanetLocationsOnClient(NetworkIdentity planetIdentity, Vector3 planetPosition, bool planetIsActive)
+    private void RpcUpdatePlanetLocationsOnClient(int childPlanetIndex, Vector3 planetPosition, Quaternion planetRotation, bool planetIsActive)
     {
-        if (planetIdentity == null) throw new MissingComponentException("Fatal Error: No NetworkIdentity provided for the planet");
-        planetIdentity.gameObject.transform.position = planetPosition;
-        planetIdentity.gameObject.SetActive(planetIsActive);
-
+        Transform planetTransform = Planets.transform.GetChild(childPlanetIndex);
+        planetTransform.position = planetPosition;
+        planetTransform.rotation = planetRotation;
+        planetTransform.gameObject.SetActive(planetIsActive);
     }
 
     IEnumerator LevelSystem()
@@ -277,7 +277,6 @@ public class GameController : NetworkBehaviour
     {
         for (int i = 0; i < amount; ++i)
         {
-            //TODO: Avoiding to actually instantiate until movement is decided
             CmdSpawnEnemy(planet.position, Quaternion.identity);
             yield return new WaitForSeconds(enemyIntervalSpawnWaitSeconds);
         }
@@ -294,12 +293,13 @@ public class GameController : NetworkBehaviour
     {
         int currentLevel = level;
         if (currentLevel <= 0 || currentLevel > maxAllowedLevels) return;
-        foreach (Transform planet in Planets.transform)
+        for (int i = 0, size = Planets.transform.childCount; i < size; ++i)
         {
+            Transform planetTransform = Planets.transform.GetChild(i);
             if (currentLevel == 0) break;
-            planet.gameObject.SetActive(true);
+            planetTransform.gameObject.SetActive(true);
             currentLevel--;
-            RpcUpdatePlanetLocationsOnClient(planet.gameObject.GetComponent<NetworkIdentity>(), planet.gameObject.transform.position, planet.gameObject.activeSelf);
+            RpcUpdatePlanetLocationsOnClient(i, planetTransform.position, planetTransform.rotation, planetTransform.gameObject.activeSelf);
         }
     }
 
@@ -448,10 +448,21 @@ public class GameController : NetworkBehaviour
         AudioSource audioData = GetComponent<AudioSource>();
         audioData.Play();
     }
-    public void setExtraRocket(bool status) { extraRocket = status; }
+    public void setExtraRocket(bool status) {
+        if (isServer == false)
+            CmdUpdateExtraRocketStatus(status);
+        else
+            extraRocket = status;
+    }
+
+    [Command]
+    private void CmdUpdateExtraRocketStatus(bool status)
+    {
+        extraRocket = status;
+    }
+
     public bool getExtraRocketStatus() { return extraRocket; }
     public bool getSpeedGift() { return speedGift; }
-    public void setSpeedGift(bool status) { speedGift = status; }
     public void enemyKilled() {
         if (isServer == false)
             CmdDecEnemies();
@@ -464,7 +475,19 @@ public class GameController : NetworkBehaviour
     {
         enemisAlive--;
     }
+    
+    public void setSpeedGift(bool status) {
+        if (isServer == false)
+            CmdUpdateSpeedGiftStatus(status);
+        else
+            speedGift = status;
+    }
 
+    [Command]
+    private void CmdUpdateSpeedGiftStatus(bool status)
+    {
+        speedGift = status;
+    }
     public void putMessage(int playerIndex,string message)
     {
         ConsoleOutput.Instance.PostMessage("Player" + playerIndex + ": " + message + ".",getRandomColor());
