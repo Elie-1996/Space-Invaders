@@ -16845,7 +16845,7 @@ GameObject:
   - component: {fileID: 2328339471020794101}
   - component: {fileID: 6995753994844036462}
   - component: {fileID: 3641281329822320916}
-  - component: {fileID: -5779043300201569339}
+  - component: {fileID: 8875478956696658273}
   m_Layer: 0
   m_Name: woodBox
   m_TagString: woodBox
@@ -16898,6 +16898,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.8548939, y: 1.6318471, z: 1.695161}
   m_Center: {x: -0.92738855, y: 0.8002626, z: -0.72909254}
+--- !u!114 &8875478956696658273
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

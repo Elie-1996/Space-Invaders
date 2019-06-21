@@ -14,6 +14,7 @@ public class DestroyEnemy : NetworkBehaviour
 
     private void Start()
     {
+        if (isServer == false) return;
         GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
         if(gameConrollerObject != null)
         {
@@ -23,6 +24,7 @@ public class DestroyEnemy : NetworkBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (isServer == false) return;
         int score =0;
         if (other.tag == Utils.TagBackground || other.tag == Utils.TagWoodBox || other.tag == Utils.TagEnemy|| other.tag == Utils.TagAsteroid)
         {
@@ -60,12 +62,19 @@ public class DestroyEnemy : NetworkBehaviour
 
     public void SpawnGiftWithProbability()
     {
-        if(Random.value < giftProbability)
+        CmdSpawnGiftWithProbability();
+    }
+
+    [Command]
+    private void CmdSpawnGiftWithProbability()
+    {
+        if (Random.value <= 1.0f)//giftProbability)
         {
             int randomGift = Random.Range(1, 4);
             GameObject gift = Instantiate(woodBox, transform.position, transform.rotation);
             HandleGiftColoring(gift, randomGift);
             gift.SendMessage("onStart", randomGift);
+            NetworkServer.Spawn(gift);
         }
     }
 

@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using System.Diagnostics;
 
-public class RocketAndScoreGift : MonoBehaviour
+public class RocketAndScoreGift : NetworkBehaviour
 {
     public GameObject explosion;
 
@@ -39,7 +40,7 @@ public class RocketAndScoreGift : MonoBehaviour
                 gameController.setSpeedGift(true);
             }
             gameController.playGiftSound();
-            Destroy(gameObject);
+            Utils.CmdDestroyObjectByID(GetComponent<NetworkIdentity>());
         }
     }
     // Update is called once per frame
