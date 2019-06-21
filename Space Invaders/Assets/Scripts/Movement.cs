@@ -130,7 +130,7 @@ public class Movement : NetworkBehaviour
         InitRocketsGUI();
         _Astro.GetComponent<RawImage>().enabled = true;
         _welcome.GetComponent<Text>().text = "Welcome to BE in space";
-        _welcomeMessage.GetComponent<Text>().text = "Hello and welcome to BE in space\n your task is to kill and get some score \n right click for master rocket\n HIT ENTER TO BEGIN";
+        _welcomeMessage.GetComponent<Text>().text = "You're trying to take over the universe\n all 8 planets will send space ships that follows you\n and try to crash you to stop your plan\n So... lets show them what you got\n\n Controls:\nMouse: Left for normal rockets, Right for master(available for short time) and move mouse for rotation\nKeyboard: t for typing a message,1 2 3 for quick messages\n AWSD for normal movments,tab for changing camera view:)\n HIT ENTER TO BEGIN";
         showWelcomeMessage = true;
         GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
         if (gameConrollerObject != null)
@@ -142,6 +142,7 @@ public class Movement : NetworkBehaviour
         userTyping = false;
         sendMessageOnce = false;
         mainInputField.SetActive(false);
+        gameController.setShowMessage(true);
     }
 
 
@@ -457,6 +458,7 @@ public class Movement : NetworkBehaviour
             _welcome.GetComponent<Text>().text = "";
             _welcomeMessage.GetComponent<Text>().text = "";
             showWelcomeMessage = false;
+            gameController.setShowMessage(false);
         }
     }
 

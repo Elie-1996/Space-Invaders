@@ -35,7 +35,7 @@ public class MoveAroundObject : NetworkBehaviour
     private float trickTime;
     private bool currentlyTricking;
     private Vector3 trickDirection;
-
+    private GameController gameController;
     private void Start()
     {
         if (isServer == false) return;
@@ -62,6 +62,11 @@ public class MoveAroundObject : NetworkBehaviour
 
         attackType = -1;
         DecideAttackType();
+        GameObject gameConrollerObject = GameObject.FindWithTag(Utils.TagGameConroller);
+        if (gameConrollerObject != null)
+        {
+            gameController = gameConrollerObject.GetComponent<GameController>();
+        }
     }
 
     private Transform FindTransformInChildWithTag(string _tag)
@@ -241,7 +246,14 @@ public class MoveAroundObject : NetworkBehaviour
     private float decideSpeed(Vector3 targetPosition)
     {
         if (Vector3.Distance(targetPosition, transform.position) <= closeApproximity)
-            return speed / 3.0f;
+        {
+            if (gameController.getShowMessage())
+            {
+                return 0;
+            }
+            else
+              return speed / 3.0f;
+        }
         return speed;
     }
 

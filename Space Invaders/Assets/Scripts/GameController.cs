@@ -67,6 +67,7 @@ public class GameController : NetworkBehaviour
     private Color[] colors = new Color[] {Color.blue, Color.cyan, Color.magenta, Color.red, Color.white, Color.yellow };
 
     private float scoreCounter;
+    private bool showMessgae;
     void loadGUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -499,4 +500,6 @@ public class GameController : NetworkBehaviour
         }
         return -1;
     }
+    public void setShowMessage(bool status) { showMessgae = status; }
+    public bool getShowMessage() {return showMessgae; }
 }
