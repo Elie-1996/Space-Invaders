@@ -311,19 +311,6 @@ public class Movement : NetworkBehaviour
             audioData = GetComponent<AudioSource>();
             audioData.Play(0);
         }
-        if (gameController.getExtraRocketStatus())
-            {
-                _masterRocketExtra.GetComponent<RawImage>().enabled = true;
-                if (Input.GetButton("Fire2") && Time.time > nextFire)
-                {
-                    nextFire = Time.time + fireRate;
-                    CmdSpawnMasterRocket(rocket2Shot.position, rocket2Shot.rotation);
-                    audioData = GetComponent<AudioSource>();
-                    audioData.Play(0);
-                    _masterRocketExtra.GetComponent<RawImage>().enabled = false;
-                    gameController.setExtraRocket(false);
-                }
-            }
         if (shotElapsedTime < 7 && canShootRocket2 && masterRocketsCount != 0)
         {
             if (Input.GetButton("Fire2") && Time.time > nextFire)
@@ -359,6 +346,19 @@ public class Movement : NetworkBehaviour
             _masterRocket2.GetComponent<RawImage>().enabled = false;
             _masterRocket3.GetComponent<RawImage>().enabled = false;
             canShootRocket2 = false;
+        }
+        if (gameController.getExtraRocketStatus())
+        {
+            _masterRocketExtra.GetComponent<RawImage>().enabled = true;
+            if (Input.GetButton("Fire2") && Time.time > nextFire)
+            {
+                nextFire = Time.time + fireRate;
+                CmdSpawnMasterRocket(rocket2Shot.position, rocket2Shot.rotation);
+                audioData = GetComponent<AudioSource>();
+                audioData.Play(0);
+                _masterRocketExtra.GetComponent<RawImage>().enabled = false;
+                gameController.setExtraRocket(false);
+            }
         }
     }
 

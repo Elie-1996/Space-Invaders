@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.40303722, g: 0.4236848, b: 0.42514268, a: 1}
+  m_IndirectSpecularColor: {r: 0.40303728, g: 0.42368498, b: 0.42514232, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1038,7 +1038,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -1721,6 +1721,8 @@ MonoBehaviour:
   gameOverTextPrefab: {fileID: 6337541770332392082, guid: 1b19299ff1221a84f9ef2592803a6f47,
     type: 3}
   RestartTextPrefab: {fileID: 8597030902195507947, guid: 3ccb68a49d20945448b0126bc24f99ee,
+    type: 3}
+  enemyCounttPrefab: {fileID: 1767590680643349562, guid: c6be8164823dc6246a428a1c565aff94,
     type: 3}
   winImage: {fileID: 2388704308088625787, guid: 0608ba30f23f6d14fab30404084bf452,
     type: 3}
