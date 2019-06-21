@@ -133,7 +133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &104693763400234951
 Transform:
   m_ObjectHideFlags: 0
@@ -6496,6 +6496,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6536616968178106489}
     m_Modifications:
+    - target: {fileID: 6354039030043409416, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
+        type: 3}
+      propertyPath: m_Name
+      value: Fireworks (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 6354039030043409463, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6566,11 +6571,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.0010000004
       objectReference: {fileID: 0}
-    - target: {fileID: 6354039030043409416, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
-        type: 3}
-      propertyPath: m_Name
-      value: Fireworks (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 6354039031430570082, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
@@ -6636,6 +6636,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6536616968178106489}
     m_Modifications:
+    - target: {fileID: 6354039030043409416, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
+        type: 3}
+      propertyPath: m_Name
+      value: Fireworks (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 6354039030043409463, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6705,11 +6710,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.0010000004
-      objectReference: {fileID: 0}
-    - target: {fileID: 6354039030043409416, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
-        type: 3}
-      propertyPath: m_Name
-      value: Fireworks (1)
       objectReference: {fileID: 0}
     - target: {fileID: 6354039031430570082, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
         type: 3}
@@ -6781,6 +6781,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6536616968178106489}
     m_Modifications:
+    - target: {fileID: 6354039030043409416, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
+        type: 3}
+      propertyPath: m_Name
+      value: Fireworks
+      objectReference: {fileID: 0}
     - target: {fileID: 6354039030043409463, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6850,11 +6855,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.0010000005
-      objectReference: {fileID: 0}
-    - target: {fileID: 6354039030043409416, guid: 1b8ebf7538975c74cbbe32ff96bd6903,
-        type: 3}
-      propertyPath: m_Name
-      value: Fireworks
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b8ebf7538975c74cbbe32ff96bd6903, type: 3}

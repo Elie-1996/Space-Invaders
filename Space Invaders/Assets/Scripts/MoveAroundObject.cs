@@ -241,7 +241,7 @@ public class MoveAroundObject : NetworkBehaviour
     private float decideSpeed(Vector3 targetPosition)
     {
         if (Vector3.Distance(targetPosition, transform.position) <= closeApproximity)
-            return speed / 3.0f;
+            return 0;// speed / 3.0f;
         return speed;
     }
 

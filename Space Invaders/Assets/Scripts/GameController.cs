@@ -55,8 +55,8 @@ public class GameController : NetworkBehaviour
     public Vector3 AsteroidDirection { get { return _AsteroidDirection; } }
     private Vector3 startSpawn;
 
-    [SyncVar(hook = "showEnimesCount")]
-    private int enemisAlive;
+    [SyncVar(hook = "showEnemiesCount")]
+    private int enemiesAlive;
 
     private uint[] playersIndex = new uint[10]{0,0,0,0,0,0,0,0,0,0};
 
@@ -94,7 +94,7 @@ public class GameController : NetworkBehaviour
 
         if (isServer)
         {
-            enemisAlive = 0;
+            enemiesAlive = 0;
             score = 0;
         }
     }
@@ -116,7 +116,7 @@ public class GameController : NetworkBehaviour
 
         // specific to the LOCAL PLAYER (For Now)
         updateScoreGUI(score);
-        showEnimesCount(enemisAlive);
+        showEnemiesCount(enemiesAlive);
         gameOver = false;
         restart = false;
         escape = true;
@@ -253,7 +253,7 @@ public class GameController : NetworkBehaviour
     }
     IEnumerator SpawnLevel(int level)
     {
-        enemisAlive = 0;
+        enemiesAlive = 0;
         showLevelText();
         int counter = 0;
         int enemiesToAdd = level;// * 3;
@@ -262,14 +262,14 @@ public class GameController : NetworkBehaviour
         {
             if (child.gameObject.activeSelf == false) continue;
             counter++;
-            int adder = enemisAlive + enemiesToAdd;
-            enemisAlive = adder;
-            Debug.Log(enemisAlive);
+            int adder = enemiesAlive + enemiesToAdd;
+            enemiesAlive = adder;
+            Debug.Log(enemiesAlive);
             StartCoroutine (SpawnEnemiesFromPlanet(child, enemiesToAdd));
         }
         counter *= enemiesToAdd;
-        enemisAlive = counter;
-        yield return new WaitUntil(() => enemisAlive == 0);
+        enemiesAlive = counter;
+        yield return new WaitUntil(() => enemiesAlive == 0);
         shouldAdvanceLevel = true;
     }
     
@@ -334,9 +334,9 @@ public class GameController : NetworkBehaviour
         scoreCounter += Time.deltaTime;
         if (scoreCounter > 1) { _scoreText.GetComponent<Text>().color = Color.white; _scoreText.GetComponent<Text>().fontSize -= 5; }
     }
-    void showEnimesCount(int something)
+    void showEnemiesCount(int something)
     {
-        _enemyCount.GetComponent<Text>().text = "Enemies left: " + enemisAlive;
+        _enemyCount.GetComponent<Text>().text = "Enemies left: " + enemiesAlive;
     }
 
     IEnumerator SpawnAsteroidsHelper()
@@ -465,15 +465,15 @@ public class GameController : NetworkBehaviour
     public bool getSpeedGift() { return speedGift; }
     public void enemyKilled() {
         if (isServer == false)
-            CmdDecEnemies();
+            CmdDecreaseEnemies();
         else
-            enemisAlive--;
+            enemiesAlive--;
     }
 
     [Command]
-    private void CmdDecEnemies()
+    private void CmdDecreaseEnemies()
     {
-        enemisAlive--;
+        enemiesAlive--;
     }
     
     public void setSpeedGift(bool status) {
