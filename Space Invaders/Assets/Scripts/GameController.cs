@@ -17,6 +17,8 @@ public class GameController : NetworkBehaviour
     public Text scoreTextPrefab;
     public Text gameOverTextPrefab;
     public Text RestartTextPrefab;
+    public Text enemyCounttPrefab;
+    private GameObject _enemyCount;
     public RawImage winImage;
     private GameObject _winImage;
     public Text levelText;
@@ -25,7 +27,7 @@ public class GameController : NetworkBehaviour
     private GameObject _winning;
     public GameObject chat;
     private GameObject _chat;
-    private int showLevelFor40Frame;
+    private float showLevelFor4Sec;
     private GameObject _scoreText;
     private GameObject _gameOverText;
     private GameObject _RestartText;
@@ -52,11 +54,15 @@ public class GameController : NetworkBehaviour
 
     public Vector3 AsteroidDirection { get { return _AsteroidDirection; } }
     private Vector3 startSpawn;
+
+    [SyncVar(hook = "showEnimesCount")]
     private int enemisAlive;
 
     private uint[] playersIndex = new uint[10]{0,0,0,0,0,0,0,0,0,0};
 
     private Color[] colors = new Color[] {Color.blue, Color.cyan, Color.magenta, Color.red, Color.white, Color.yellow };
+
+    private float scoreCounter;
     void loadGUI()
     {
         GameObject canvasObject = Instantiate(canvas).gameObject;
@@ -83,7 +89,14 @@ public class GameController : NetworkBehaviour
         _chat = Instantiate(chat.gameObject);
         _chat.transform.SetParent(rTransform, false);
 
-        if (isServer) score = 0;
+        _enemyCount = Instantiate(enemyCounttPrefab.gameObject);
+        _enemyCount.transform.SetParent(rTransform, false);
+
+        if (isServer)
+        {
+            enemisAlive = 0;
+            score = 0;
+        }
     }
 
     public void playGiftSound()
@@ -94,6 +107,7 @@ public class GameController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        scoreCounter = 0;
         if (Planets == null || gameBackground == null || AsteroidPrefab == null) throw new MissingReferenceException();
         // specific to the LOCAL PLAYER
         Cursor.visible = false;
@@ -102,6 +116,7 @@ public class GameController : NetworkBehaviour
 
         // specific to the LOCAL PLAYER (For Now)
         updateScoreGUI(score);
+        showEnimesCount(enemisAlive);
         gameOver = false;
         restart = false;
         escape = true;
@@ -191,6 +206,7 @@ public class GameController : NetworkBehaviour
         {
             shouldAdvanceLevel = false;
             SpawnPlanets();
+            showLevelFor4Sec = 0f;
             StartCoroutine(SpawnLevel(level));
             yield return new WaitUntil(() => shouldAdvanceLevel == true);
             ++level;
@@ -225,9 +241,9 @@ public class GameController : NetworkBehaviour
 
     void showLevelText()
     {
-        if(showLevelFor40Frame != 0)
+        showLevelFor4Sec += Time.deltaTime;
+        if(showLevelFor4Sec <4)
         {
-            showLevelFor40Frame--;
             _level.GetComponent<Text>().text = "LEVEL " + level + "!";
         }
         else
@@ -238,16 +254,21 @@ public class GameController : NetworkBehaviour
     IEnumerator SpawnLevel(int level)
     {
         enemisAlive = 0;
-        showLevelFor40Frame = 40;
         showLevelText();
+        int counter = 0;
+        int enemiesToAdd = level;// * 3;
         // spawn some enemies
         foreach (Transform child in Planets.transform)
         {
             if (child.gameObject.activeSelf == false) continue;
-            int enemiesToAdd = level;// * 3;
-            enemisAlive += enemiesToAdd;
+            counter++;
+            int adder = enemisAlive + enemiesToAdd;
+            enemisAlive = adder;
+            Debug.Log(enemisAlive);
             StartCoroutine (SpawnEnemiesFromPlanet(child, enemiesToAdd));
         }
+        counter *= enemiesToAdd;
+        enemisAlive = counter;
         yield return new WaitUntil(() => enemisAlive == 0);
         shouldAdvanceLevel = true;
     }
@@ -310,6 +331,12 @@ public class GameController : NetworkBehaviour
             }
         }
         showLevelText();
+        scoreCounter += Time.deltaTime;
+        if (scoreCounter > 1) { _scoreText.GetComponent<Text>().color = Color.white; _scoreText.GetComponent<Text>().fontSize -= 5; }
+    }
+    void showEnimesCount(int something)
+    {
+        _enemyCount.GetComponent<Text>().text = "Enemies left: " + enemisAlive;
     }
 
     IEnumerator SpawnAsteroidsHelper()
@@ -383,10 +410,14 @@ public class GameController : NetworkBehaviour
     {
         score = newScore;
         _scoreText.GetComponent<Text>().text = "Combined Score: " + score;
+        _scoreText.GetComponent<Text>().color = Color.yellow;
+        _scoreText.GetComponent<Text>().fontSize += 5;
+        scoreCounter = 0;
     }
 
     public void addScore (int newScore)
     {
+
         if (!isServer)
             CmdSetScore(newScore);
         else
@@ -400,9 +431,11 @@ public class GameController : NetworkBehaviour
     }
 
     public void GameOverFunction(){
+        _level.SetActive(false);
+        _enemyCount.SetActive(false);
         _gameOverText.GetComponent<Text>().text = "Game Over!";
-        _RestartText.GetComponent<Text>().text = "Press 'R' for restart";
-        restart = true;
+        //_RestartText.GetComponent<Text>().text = "Press 'R' for restart";
+        //restart = true;
         gameOver = true;
         AudioListener audioListener = GetComponent<AudioListener>();
         audioListener.enabled = true;
@@ -419,7 +452,19 @@ public class GameController : NetworkBehaviour
     public bool getExtraRocketStatus() { return extraRocket; }
     public bool getSpeedGift() { return speedGift; }
     public void setSpeedGift(bool status) { speedGift = status; }
-    public void enemyKilled() { enemisAlive--; }
+    public void enemyKilled() {
+        if (isServer == false)
+            CmdDecEnemies();
+        else
+            enemisAlive--;
+    }
+
+    [Command]
+    private void CmdDecEnemies()
+    {
+        enemisAlive--;
+    }
+
     public void putMessage(int playerIndex,string message)
     {
         ConsoleOutput.Instance.PostMessage("Player" + playerIndex + ": " + message + ".",getRandomColor());
