@@ -68,7 +68,7 @@ public class DestroyEnemy : NetworkBehaviour
     [Command]
     private void CmdSpawnGiftWithProbability()
     {
-        if (Random.value <= 1.0f)//giftProbability)
+        if (Random.value <= giftProbability)
         {
             int randomGift = Random.Range(1, 4);
             GameObject gift = Instantiate(woodBox, transform.position, transform.rotation);
