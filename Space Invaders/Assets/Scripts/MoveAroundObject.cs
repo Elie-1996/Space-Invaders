@@ -93,6 +93,11 @@ public class MoveAroundObject : NetworkBehaviour
 
     private void AttackPlan(Transform targetTransform)
     {
+        if (gameController.isGameOver)
+        {
+            RandomMovement();
+            return;
+        }
         if (shouldSteerFromEnemies())
             SteerFromCloseEnemies();
         else if (shouldTrickPlayer())
@@ -245,15 +250,18 @@ public class MoveAroundObject : NetworkBehaviour
 
     private float decideSpeed(Vector3 targetPosition)
     {
+        float inferredSpeed = inferSpeed();
         if (Vector3.Distance(targetPosition, transform.position) <= closeApproximity)
         {
-            if (gameController.getShowMessage())
-            {
-                return 0;
-            }
-            else
-              return speed / 3.0f;
+            return inferredSpeed / 3.0f;
         }
+        return inferredSpeed;
+    }
+
+    private float inferSpeed()
+    {
+        if (gameController.getShowMessage()) return 0.0f;
+        if (gameController.isGameOver == true) return speed / 6.0f;
         return speed;
     }
 

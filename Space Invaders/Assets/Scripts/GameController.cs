@@ -62,6 +62,9 @@ public class GameController : NetworkBehaviour
     [SyncVar(hook = "showEnemiesCount")]
     private int enemiesAlive;
 
+    [SyncVar]
+    public bool isGameOver;
+
     private uint[] playersIndex = new uint[10]{0,0,0,0,0,0,0,0,0,0};
 
     private Color[] colors = new Color[] {Color.blue, Color.cyan, Color.magenta, Color.red, Color.white, Color.yellow };
@@ -112,6 +115,7 @@ public class GameController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isGameOver = false;
         scoreCounter = 0;
         if (Planets == null || gameBackground == null || AsteroidPrefab == null) throw new MissingReferenceException();
         // specific to the LOCAL PLAYER
@@ -207,7 +211,7 @@ public class GameController : NetworkBehaviour
     {
         if (isServer == false) throw new Utils.AttemptedUnauthorizedAccessLevelSystemException("hasAuthority = " + hasAuthority + ", isLocalPlayer = " + isLocalPlayer + ", isServer = " + isServer + ".");
         yield return new WaitUntil(() => playersInGameExist);
-        while (level < maxAllowedLevels)
+        while (level <= maxAllowedLevels)
         {
             shouldAdvanceLevel = false;
             SpawnPlanets();
@@ -251,7 +255,8 @@ public class GameController : NetworkBehaviour
 
     IEnumerator showLevelTextS(int newLevel)
     {
-        _level.GetComponent<Text>().text = "LEVEL " + newLevel + "!";
+        if (newLevel <= maxAllowedLevels)
+            _level.GetComponent<Text>().text = "LEVEL " + newLevel + "!";
         yield return new WaitForSeconds(4.0f);
         _level.GetComponent<Text>().text = "";
     }
@@ -427,7 +432,35 @@ public class GameController : NetworkBehaviour
         score += newScore;
     }
 
-    public void GameOverFunction(){
+    public void GameOverFunction()
+    {
+        if (isGameOver) return;
+        if (isServer == true)
+        {
+            GameOverFunctionHelper();
+            RpcGameOverFunction();
+        }
+        else
+        {
+            CmdGameOverFunction();
+        }
+    }
+
+    [Command]
+    private void CmdGameOverFunction()
+    {
+        GameOverFunctionHelper();
+        RpcGameOverFunction();
+    }
+
+    [ClientRpc]
+    private void RpcGameOverFunction()
+    {
+        GameOverFunctionHelper();
+    }
+
+    private void GameOverFunctionHelper()
+    {
         _level.SetActive(false);
         _enemyCount.SetActive(false);
         _gameOverText.GetComponent<Text>().text = "Game Over!";
@@ -444,7 +477,11 @@ public class GameController : NetworkBehaviour
         }
         AudioSource audioData = GetComponent<AudioSource>();
         audioData.Play();
+
+        // most important update of all:
+        isGameOver = true;
     }
+
     public void setExtraRocket(bool status) {
         extraRocket = status;
         if (isServer == true && status == true)

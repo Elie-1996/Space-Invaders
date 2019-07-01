@@ -30,6 +30,7 @@ public class DestroyAsteroid : NetworkBehaviour
         if (other.tag == Utils.TagPlayer)
         {
             gameController.GameOverFunction();
+            return;
         }
         if (other.tag == Utils.TagRocket2)
         {

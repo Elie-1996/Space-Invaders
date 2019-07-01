@@ -22,10 +22,11 @@ public class DestroyEnemy : NetworkBehaviour
         }
 
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (isServer == false) return;
-        int score =0;
+        int score = 0;
         if (other.tag == Utils.TagBackground || other.tag == Utils.TagWoodBox || other.tag == Utils.TagEnemy|| other.tag == Utils.TagAsteroid)
         {
             return;
@@ -33,6 +34,7 @@ public class DestroyEnemy : NetworkBehaviour
         if(other.tag == Utils.TagPlayer)
         {
             gameController.GameOverFunction();
+            return;
         }
         if (other.tag == Utils.TagRocket2)
         {

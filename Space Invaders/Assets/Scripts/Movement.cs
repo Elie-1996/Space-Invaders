@@ -61,6 +61,7 @@ public class Movement : NetworkBehaviour
     private int playerIndex;
     private bool userTyping;
     private bool sendMessageOnce;
+
     public override void OnStartAuthority()
     {
         Start();
@@ -166,6 +167,7 @@ public class Movement : NetworkBehaviour
             HandleRegularMessage();
         }
     }
+
     private void HandleRegularMessage()
     {
         mainInputField.SetActive(true);
@@ -173,6 +175,7 @@ public class Movement : NetworkBehaviour
         mainInputField.GetComponent<InputField>().ActivateInputField();
         mainInputField.GetComponent<InputField>().onEndEdit.AddListener(getMessageFromUi);
     }
+
     private void getMessageFromUi(string message)
     {
         if(message.Length == 0) { mainInputField.SetActive(false); userTyping = false; }
@@ -180,6 +183,7 @@ public class Movement : NetworkBehaviour
         if (userTyping) { gameController.putMessage(playerIndex, message); mainInputField.SetActive(false); }
         userTyping = false;
     }
+
     private void HandleQuickMessage()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)){
@@ -192,6 +196,7 @@ public class Movement : NetworkBehaviour
             gameController.putMessage(playerIndex, HurayPress3);
         }
     }
+
     private void FixedUpdate()
     {
         if (hasAuthority == false) return;
@@ -205,11 +210,18 @@ public class Movement : NetworkBehaviour
             return;
         }
 
-        rigidbody.freezeRotation = true;
-        HandleMovement(rigidbody);
-        HandleRotation(rigidbody);
+        MovementProtocol(rigidbody);
     }
 
+    private void MovementProtocol(Rigidbody rigidbody)
+    {
+        rigidbody.freezeRotation = true;
+        if (gameController.isGameOver) { rigidbody.velocity = Vector3.zero; }
+
+        if (gameController.isGameOver == false) { HandleMovement(rigidbody); }
+        HandleRotation(rigidbody);
+    }
+    
     private void HandleMovement(Rigidbody rigidbody)
     {
         float _moveSpeed = 0;
