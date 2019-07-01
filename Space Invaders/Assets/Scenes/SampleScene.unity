@@ -1635,6 +1635,10 @@ MonoBehaviour:
     type: 3}
   win: {fileID: 8397020429353834081, guid: b6826cab461f12b41bce24ed3b07fe7a, type: 3}
   chat: {fileID: 6729619538836590907, guid: ebf88576c4f83384a8c07dfa806683e9, type: 3}
+  ChatHelper: {fileID: 3643884285532614256, guid: 0206df02908f3c240a563587fdcf3999,
+    type: 3}
+  ChatGameObject: {fileID: 0}
+  isGameOver: 0
 --- !u!4 &1655137214
 Transform:
   m_ObjectHideFlags: 0
@@ -1785,7 +1789,7 @@ MonoBehaviour:
     i14: 0
     i15: 0
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!82 &1655137218
 AudioSource:
   m_ObjectHideFlags: 0

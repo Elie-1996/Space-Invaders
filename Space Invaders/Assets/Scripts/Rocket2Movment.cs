@@ -46,7 +46,7 @@ public class Rocket2Movment : NetworkBehaviour
         if (distance > maxDistance)
         {
             int score = 0;
-            Collider[] radious = Physics.OverlapSphere(transform.position, 5f);
+            Collider[] radious = Physics.OverlapSphere(transform.position, 10.0f);
             if (radious != null)
             {
                 foreach (Collider collider in radious)

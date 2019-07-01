@@ -67,7 +67,7 @@ public class GameController : NetworkBehaviour
 
     private uint[] playersIndex = new uint[10]{0,0,0,0,0,0,0,0,0,0};
 
-    private Color[] colors = new Color[] {Color.blue, Color.cyan, Color.magenta, Color.red, Color.white, Color.yellow };
+
 
     private float scoreCounter;
     private bool showMessgae;
@@ -144,7 +144,6 @@ public class GameController : NetworkBehaviour
         AsteroidsHolder = new GameObject("Asteroid Holder");
 
         SpawnAsteroids();
-
 
         // okay, let's initiate these planets locations as the SERVER
         InitiatePlanetLocationsOnServerAndUpdateForClients();
@@ -521,22 +520,7 @@ public class GameController : NetworkBehaviour
     {
         speedGift = status;
     }
-    public void putMessage(int playerIndex,string message)
-    {
-        ConsoleOutput.Instance.PostMessage("Player" + playerIndex + ": " + message + ".",getRandomColor());
-    }
-    private Color getRandomColor() { return colors[Random.Range(0, colors.Length)]; }
-    public int setAndGetPlayerIndex(uint netWorkIndex)
-    {
-        for(int i = 0; i < 10; i++)
-        {
-            if (playersIndex[i] == 0) {
-                playersIndex[i] = netWorkIndex;
-                return i;
-            }
-        }
-        return -1;
-    }
+
     public void setShowMessage(bool status) { showMessgae = status; }
     public bool getShowMessage() {return showMessgae; }
 }

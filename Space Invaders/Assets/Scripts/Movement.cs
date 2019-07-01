@@ -58,9 +58,11 @@ public class Movement : NetworkBehaviour
     private string helpMeMessagePress1 = "Help me I'm dying!";
     private string comeHerePress2 = "come here";
     private string HurayPress3 = "Huray :)";
-    private int playerIndex;
     private bool userTyping;
     private bool sendMessageOnce;
+
+    private Color[] colors = new Color[] { Color.blue, Color.cyan, Color.magenta, Color.red, Color.white, Color.yellow };
+    private Color chatColor;
 
     public override void OnStartAuthority()
     {
@@ -100,7 +102,11 @@ public class Movement : NetworkBehaviour
 
         mainInputField = Instantiate(mainInputFieldPrefab.gameObject);
         mainInputField.transform.SetParent(rTransform, false);
+
+        chatColor = getRandomColor();
     }
+
+    private Color getRandomColor() { return colors[Random.Range(0, colors.Length)]; }
 
     private void InitializeRedAlertVariables()
     {
@@ -139,7 +145,6 @@ public class Movement : NetworkBehaviour
             gameController = gameConrollerObject.GetComponent<GameController>();
         }
         InitializeRedAlertVariables();
-        playerIndex = gameController.setAndGetPlayerIndex(GetComponent<NetworkIdentity>().netId.Value);
         userTyping = false;
         sendMessageOnce = false;
         mainInputField.SetActive(false);
@@ -180,20 +185,47 @@ public class Movement : NetworkBehaviour
     {
         if(message.Length == 0) { mainInputField.SetActive(false); userTyping = false; }
         mainInputField.GetComponent<InputField>().DeactivateInputField();
-        if (userTyping) { gameController.putMessage(playerIndex, message); mainInputField.SetActive(false); }
+        if (userTyping)
+        {
+            HandleSendingMessage(message);
+            mainInputField.SetActive(false);
+        }
         userTyping = false;
+    }
+
+    private void HandleSendingMessage(string message)
+    {
+        if (isServer == true)
+            RpcPostMessage("Host", message);
+        else CmdUpdateMessageForAllDammit("Client", message);
+    }
+
+    [Command]
+    private void CmdUpdateMessageForAllDammit(string name, string message)
+    {
+        RpcPostMessage(name, message);
+    }
+
+    [ClientRpc]
+    public void RpcPostMessage(string name, string message)
+    {
+        string output = name + ": " + message;
+        if (message.EndsWith(".") == false)
+            output = output + ".";
+
+        ConsoleOutput.Instance.PostMessage(output, chatColor);
     }
 
     private void HandleQuickMessage()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)){
-            gameController.putMessage(playerIndex, helpMeMessagePress1);
+            HandleSendingMessage(helpMeMessagePress1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2)){
-            gameController.putMessage(playerIndex, comeHerePress2);
+            HandleSendingMessage(comeHerePress2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3)){
-            gameController.putMessage(playerIndex, HurayPress3);
+            HandleSendingMessage(HurayPress3);
         }
     }
 
@@ -464,7 +496,7 @@ public class Movement : NetworkBehaviour
 
     private void WelcomeMessage()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             _Astro.GetComponent<RawImage>().enabled = false;
             _welcome.GetComponent<Text>().text = "";
