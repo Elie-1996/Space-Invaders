@@ -157,7 +157,7 @@ public class Movement : NetworkBehaviour
         else if(!userTyping)
         {
             HandleSwitchingActiveCamera();
-            HandleShooting();
+            if (gameController.isGameOver == false) HandleShooting();
             HandleDistanceFromBoundary();
             HandleQuickMessage();
             if (Input.GetKeyDown(KeyCode.T)) { userTyping = true; }
