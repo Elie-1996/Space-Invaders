@@ -2,9 +2,7 @@
 `
 <form method="get" action="Space%20Invaders/Installer/BE%20In%20Space%20Setup%20(x86).exe">
 <button type="submit" style="background-color:darksalmon">Download it!</button>
-</form>
-
-<form method="get" action="Space%20Invaders/BE%20in%20space.pdf">
+</form> <form method="get" action="Space%20Invaders/BE%20in%20space.pdf">
 <button type="submit" style="background-color:darksalmon">Download Report</button>
 </form>
 `
@@ -17,11 +15,9 @@ The game’s world is a sphere, which can be navigated from within. The players 
 The enemies that try to kill you are operating on AI movement so they always follow you intelligently and in a unique way, players will destroy enemies by shooting rockets.
 
 `
-<video width="420" height="345" controls>
-  <source src="https://youtu.be/u92ehvq_rkw">
-`
-`
+<div>
   <a href="https://youtu.be/u92ehvq_rkw" target="_blank"><img src="https://img.youtube.com/vi/u92ehvq_rkw/default.jpg" 
 alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+</div>
 `
 
