@@ -13,8 +13,8 @@ All game is handling in 3D objects, including moving and rotations.
 The game’s world is a sphere, which can be navigated from within. The players will not be able to escape this sphere, doing so will result in a gameover. All movements, translations and rotations are done in a 3D world space.
 The enemies that try to kill you are operating on AI movement so they always follow you intelligently and in a unique way, players will destroy enemies by shooting rockets.
 
-#Video
-######please click the picture
+# Video
+###### please click the picture
 <div>
   <a href="https://youtu.be/u92ehvq_rkw" target="_blank"><img src="https://img.youtube.com/vi/u92ehvq_rkw/default.jpg" 
 alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
