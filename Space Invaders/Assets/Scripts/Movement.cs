@@ -49,7 +49,7 @@ public class Movement : NetworkBehaviour
     private bool shouldStart = true;
     private float extraSpeeedTime;
     private float radious;
-    private int waitTwoFrames;
+    private float waitSeconds;
     private Image image;
     private AudioSource dangerAudioSource;
     private Text dangerText;
@@ -110,7 +110,7 @@ public class Movement : NetworkBehaviour
 
     private void InitializeRedAlertVariables()
     {
-        waitTwoFrames = 0;
+        waitSeconds = 0.0f;
         radious = Utils.getGameBoundaryRadius(GameObject.FindGameObjectWithTag(Utils.TagBackground));
         image = _redPicture.GetComponent<Image>();
         dangerText = _redMessage.GetComponent<Text>();
@@ -520,19 +520,19 @@ public class Movement : NetworkBehaviour
             }
             dangerText.text = "You're too close to the edge! STAY AWAY";
             dangerAudioSource.enabled = true;
-            if (waitTwoFrames == 0)
+            if (waitSeconds == 0)
             {
                 Color tmpColor = image.color;
                 tmpColor.a = 0.5f;
                 image.color = tmpColor;
             }
-            waitTwoFrames++;
-            if (waitTwoFrames == 3)
+            waitSeconds += Time.deltaTime;
+            if (waitSeconds >= 0.3f)
             {
                 Color tmpColor = image.color;
                 tmpColor.a = 0f;
                 image.color = tmpColor;
-                waitTwoFrames = 0;
+                waitSeconds = 0;
             }
         }
         else if (distance <= 0) { dangerText.text = ""; Destroy(gameObject); gameController.GameOverFunction(); }
