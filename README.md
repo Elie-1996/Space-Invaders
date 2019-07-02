@@ -17,6 +17,7 @@ The game’s world is a sphere, which can be navigated from within. The players 
 The enemies that try to kill you are operating on AI movement so they always follow you intelligently and in a unique way, players will destroy enemies by shooting rockets.
 
 `
-<iframe width="420" height="345" src="https://youtu.be/u92ehvq_rkw">
-</iframe>
+<video width="420" height="345" controls>
+  <source src="https://youtu.be/u92ehvq_rkw">
 `
+
