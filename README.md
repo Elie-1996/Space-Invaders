@@ -3,8 +3,7 @@
 <form method="get" action="Space%20Invaders/Installer/BE%20In%20Space%20Setup%20(x86).exe">
 <button type="submit" style="background-color:darksalmon">Download it!</button>
 </form>
-`
-`
+
 <form method="get" action="Space%20Invaders/BE%20in%20space.pdf">
 <button type="submit" style="background-color:darksalmon">Download Report</button>
 </form>
@@ -17,5 +16,7 @@ All game is handling in 3D objects, including moving and rotations.
 The game’s world is a sphere, which can be navigated from within. The players will not be able to escape this sphere, doing so will result in a gameover. All movements, translations and rotations are done in a 3D world space.
 The enemies that try to kill you are operating on AI movement so they always follow you intelligently and in a unique way, players will destroy enemies by shooting rockets.
 
+`
 <iframe width="420" height="345" src="https://youtu.be/u92ehvq_rkw">
 </iframe>
+`
