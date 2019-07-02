@@ -2,11 +2,6 @@
 <img align="center" src="Space%20Invaders/Assets/Textures/Backgrounds/cooltext327947084721570.png?raw=true">
 <img align="center" src="Space%20Invaders/enemy_Player.png?raw=true">
   </p>
-<form method="get" action="Space%20Invaders/Installer/BE%20In%20Space%20Setup%20(x86).exe">
-<button type="submit" style="background-color:darksalmon">Download game installer!</button>
-</form> <form method="get" action="Space%20Invaders/BE%20in%20space.pdf">
-<button type="submit" style="background-color:darksalmon">view Report</button>
-</form>
 
 <form method="get" action="Space%20Invaders/Installer/BE%20In%20Space%20Setup%20(x86).exe">
 <button type="submit" style="background-color:darksalmon">Download game installer!</button>
