@@ -1,9 +1,9 @@
 ![](Space%20Invaders/Assets/Textures/Backgrounds/cooltext327947084721570.png?raw=true)
 
 <form method="get" action="Space%20Invaders/Installer/BE%20In%20Space%20Setup%20(x86).exe">
-<button type="submit" style="background-color:darksalmon">Download it!</button>
+<button type="submit" style="background-color:darksalmon">Download game installer!</button>
 </form> <form method="get" action="Space%20Invaders/BE%20in%20space.pdf">
-<button type="submit" style="background-color:darksalmon">Download Report</button>
+<button type="submit" style="background-color:darksalmon">view Report</button>
 </form>
 
 ## ** Welcome to BE in space online**
