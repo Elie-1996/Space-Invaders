@@ -4,8 +4,8 @@
   </p>
 
 A Game Proudly brought to you by a pair of students </br>
-**_B_**asel Zarka </br>
-**_E_**lie Abboud </br>
+**B**asel Zarka </br>
+**E**lie Abboud </br>
 
 <form method="get" action="Space%20Invaders/Installer/BE%20In%20Space%20Setup%20(x86).exe">
 <button type="submit" style="background-color:darksalmon">Download game installer!</button>
