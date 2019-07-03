@@ -3,9 +3,11 @@
 <img align="center" src="Space%20Invaders/enemy_Player.png?raw=true">
   </p>
 
-A Game Proudly brought to you by a pair of students </br>
-**B**asel Zarka </br>
-**E**lie Abboud </br>
+<div>
+A Game Proudly brought to you by a pair of students
+**B**asel Zarka
+**E**lie Abboud
+</div>
 
 <form method="get" action="Space%20Invaders/Installer/BE%20In%20Space%20Setup%20(x86).exe">
 <button type="submit" style="background-color:darksalmon">Download game installer!</button>
